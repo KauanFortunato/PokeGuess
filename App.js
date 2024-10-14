@@ -7,7 +7,7 @@ export default function App() {
 
 	// Sortear Pokémon da base de dados
 	const chosenPoke = () => {
-		fetch('http://192.168.1.91/PokeGuess/php/api/random-poke.php') // Lembrar de colocar o ip do pc (ipv4)
+		fetch('http://172.20.10.2/PokeGuess/php/api/random-poke.php') // Lembrar de colocar o ip do pc (ipv4)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.status === 'sorteado') {
@@ -56,7 +56,7 @@ export default function App() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#3A3260',
+		backgroundColor: '#7971A0',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
