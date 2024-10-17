@@ -5,6 +5,8 @@ import { chosenPoke } from './functions/chosen-poke';
 // import SearchPoke from './src/components/search-poke';
 import { FilterPoke } from './functions/filter-poke';
 import FilterPokes from './src/components/filter-pokes';
+import Header from './src/components/header';
+import Body from './src/components/body';
 
 export default function App() {
 	const [pokemon, setPokemon] = useState(null);
@@ -21,14 +23,18 @@ export default function App() {
 
 	return (
 		<View style={styles.container}>
+			<Header />
+
 			<TextInput
 				style={styles.input}
 				placeholder="Nome do Pokémon..."
 				value={pokeTerm}
 				onChangeText={setPokeTerm}
 			/>
-
+			{/* Esse componente é onde mostra os pokemons sugeridos de acordo com o input do user*/}
 			<FilterPokes filteredPokemons={filteredPokemons} />
+
+			<Body />
 
 			{/* Não vamos usar essa parte do codigo, isto é só para debugar */}
 			{pokemon && (
@@ -58,10 +64,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flex: 5,
 		backgroundColor: '#7971A0',
 		alignItems: 'center',
-		paddingTop: 50,
 	},
 
 	input: {
