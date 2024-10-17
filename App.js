@@ -1,13 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import Header from './src/components/header';
+import Body from './src/components/body';
 
 export default function App() {
 	const [pokemon, setPokemon] = useState(null);
 
 	// Sortear Pokémon da base de dados
 	const chosenPoke = () => {
-		fetch('http://172.20.10.2/PokeGuess/php/api/random-poke.php') // Lembrar de colocar o ip do pc (ipv4)
+		fetch('http://10.0.0.3/PokeGuess/php/api/random-poke.php') // Lembrar de colocar o ip do pc (ipv4)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.status === 'sorteado') {
@@ -29,6 +31,8 @@ export default function App() {
 
 	return (
 		<View style={styles.container}>
+			<Header />
+			<Body />
 			{pokemon && (
 				<View style={styles.container}>
 					<Text>Nome: {pokemon.nome}</Text>
@@ -46,7 +50,6 @@ export default function App() {
 							style={{ width: 180, height: 180 }}
 						/>
 					)}
-					<StatusBar style="auto" />
 				</View>
 			)}
 		</View>
@@ -55,7 +58,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flex: 5,
 		backgroundColor: '#7971A0',
 		alignItems: 'center',
 		justifyContent: 'center',
