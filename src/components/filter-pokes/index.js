@@ -1,5 +1,5 @@
 import { View, Image, Text, FlatList } from 'react-native';
-import styles from './style';
+import styles from './styles';
 
 export default function FilterPokes(props) {
 	return (
