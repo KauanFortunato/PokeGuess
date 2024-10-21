@@ -2,12 +2,13 @@ import { Alert } from 'react-native';
 
 // Sortear Pokémon da base de dados
 export const chosenPoke = (setPokemon) => {
-	fetch('http://192.168.1.91/PokeGuess/php/api/random-poke.php') // Lembrar de colocar o ip do pc (ipv4)
+	fetch('http://10.0.0.3/PokeGuess/php/api/random-poke.php') // Lembre-se de usar o IP correto
 		.then((response) => response.json())
 		.then((data) => {
+			// Verifica se a resposta foi bem-sucedida
 			if (data.status === 'sorteado') {
-				console.log('Pokémon sorteado com sucesso');
-				setPokemon(data.pokemon);
+				console.log('Pokémon sorteado com sucesso:', data.pokemon);
+				setPokemon(data.pokemon); // Corrige para acessar data.pokemon
 			} else {
 				Alert.alert('Erro', 'Não foi possível sortear o Pokémon.');
 			}

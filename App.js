@@ -6,6 +6,7 @@ import { chosenPoke } from './functions/chosen-poke';
 import { FilterPoke } from './functions/filter-poke';
 import FilterPokes from './src/components/filter-pokes';
 import Header from './src/components/header';
+import Search from './src/components/search';
 import Body from './src/components/body';
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
 	return (
 		<View style={styles.container}>
 			<Header />
+			<Search />
 
 			<TextInput
 				style={styles.input}
@@ -31,33 +33,32 @@ export default function App() {
 				value={pokeTerm}
 				onChangeText={setPokeTerm}
 			/>
-			{/* Esse componente é onde mostra os pokemons sugeridos de acordo com o input do user*/}
+
+			{/* Componente onde mostra os pokémons sugeridos de acordo com o input do usuário */}
 			<FilterPokes filteredPokemons={filteredPokemons} />
 
 			<Body />
 
-			{/* Não vamos usar essa parte do codigo, isto é só para debugar */}
-			{pokemon && (
-				<View style={styles.container}>
+			{/* Parte do código para debugar (se necessário) */}
+			{/* {pokemon && (
+				<View style={styles.debugContainer}>
 					{pokemon.imagem_base64 && (
 						<Image
 							source={{ uri: `data:image/jpeg;base64,${pokemon.imagem_base64}` }}
 							style={{ width: 180, height: 180 }}
 						/>
 					)}
-
 					<Text>Nome: {pokemon.nome}</Text>
-					<Text>Tipo1: {pokemon.tipo1}</Text>
-					<Text>Tipo2: {pokemon.tipo2}</Text>
-					<Text>habitat: {pokemon.habitat}</Text>
-					<Text>cor: {pokemon.cor}</Text>
-					<Text>Evolucao: {pokemon.numero_evolucao}</Text>
+					<Text>Tipo 1: {pokemon.tipo1}</Text>
+					<Text>Tipo 2: {pokemon.tipo2}</Text>
+					<Text>Habitat: {pokemon.habitat}</Text>
+					<Text>Cor: {pokemon.cor}</Text>
+					<Text>Evolução: {pokemon.numero_evolucao}</Text>
 					<Text>Altura: {pokemon.altura}</Text>
 					<Text>Peso: {pokemon.peso}</Text>
-
-					<StatusBar style="auto" />
 				</View>
 			)}
+			<StatusBar style="auto" />*/}
 		</View>
 	);
 }
