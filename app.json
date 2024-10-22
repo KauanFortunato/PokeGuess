@@ -9,7 +9,7 @@
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"backgroundColor": "#7971A0"
 		},
 		"ios": {
 			"supportsTablet": true,
@@ -17,13 +17,18 @@
 		},
 		"android": {
 			"package": "com.dbkg.pokeguess",
+			"versionCode": 1,
+			"permissions": ["INTERNET"],
+			"buildType": "apk",
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
+				"backgroundColor": "#7971A0"
 			}
 		},
-		"web": {
-			"favicon": "./assets/favicon.png"
+		"extra": {
+			"eas": {
+				"projectId": "3695c543-0af7-42a0-92f9-20720c748a86"
+			}
 		}
 	}
 }
