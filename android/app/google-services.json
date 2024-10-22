@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "496865307713",
+    "project_id": "pokeguess-3tgpsi",
+    "storage_bucket": "pokeguess-3tgpsi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496865307713:android:87a2c88037683f3514aac0",
+        "android_client_info": {
+          "package_name": "com.dbkg.pokeguess"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNJiBO491XoIx2TvGWrSWg3PYsGQtsKys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
