@@ -1,14 +1,24 @@
+import {
+	API_KEY,
+	AUTH_DOMAIN,
+	PROJECT_ID,
+	STORAGE_BUCKET,
+	MESSAGING_SENDER_ID,
+	APP_ID,
+	MEASUREMENT_ID,
+} from '@env';
+
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyBBeLwAW-Ixdu8yOuLzm0kqEwNo0IFj7Mo',
-	authDomain: 'pokeguess-3tgpsi.firebaseapp.com',
-	projectId: 'pokeguess-3tgpsi',
-	storageBucket: 'pokeguess-3tgpsi.appspot.com',
-	messagingSenderId: '496865307713',
-	appId: '1:496865307713:web:5455f6ea01241bca14aac0',
-	measurementId: 'G-6FNZ4TR9YC',
+	apiKey: API_KEY,
+	authDomain: AUTH_DOMAIN,
+	projectId: PROJECT_ID,
+	storageBucket: STORAGE_BUCKET,
+	messagingSenderId: MESSAGING_SENDER_ID,
+	appId: APP_ID,
+	measurementId: MEASUREMENT_ID,
 };
 
 // Initialize Firebase

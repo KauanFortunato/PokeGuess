@@ -8,10 +8,7 @@ export default function FilterPokes(props) {
 			keyExtractor={(item, index) => index.toString()}
 			renderItem={({ item }) => (
 				<View>
-					<Image
-						style={styles.searchImgPoke}
-						source={{ uri: `data:image/png;base64,${item.imagem}` }}
-					/>
+					<Image style={styles.searchImgPoke} source={{ uri: `${item.img_poke}` }} />
 					<Text style={{ fontSize: 18, marginBottom: 10 }}>{item.nome}</Text>
 				</View>
 			)}
