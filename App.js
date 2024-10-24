@@ -6,11 +6,13 @@ import Header from './src/components/header';
 import Search from './src/components/search';
 import Body from './src/components/body';
 import { useChosenPoke } from './src/functions/chosen-poke/index';
+import { comparePokemons } from './src/firebase/api/compare-poke/comparePokemons';
 
 export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
 	const [pokeTerm, setPokeTerm] = useState(''); // Variavel onde é guardado qual o pokémon que a pessoa está digitando
 	const [randomPokemon, setRandomPokemon] = useState(null); // Variavel onde o pokemon randomizado é guardado
+	const [comparisonResult, setComparisonResult] = useState(''); // Variável para armazenar o resultado da comparação
 
 	useEffect(() => {
 		useChosenPoke(setRandomPokemon); // Essa função é chamada toda vez que a pessoa atualiza o app
@@ -19,6 +21,17 @@ export default function App() {
 	useEffect(() => {
 		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o app
 	}, [pokeTerm]);
+
+	const handleComparison = () => {
+		if (randomPokemon) {
+			const result = comparePokemons(pokeTerm, randomPokemon);
+			setComparisonResult(result);
+		}
+	};
+
+	const handleSubmit = () => {
+		handleComparison();
+	};
 
 	return (
 		<View style={styles.container}>
@@ -50,6 +63,7 @@ export default function App() {
 						title="Sortear Pokémon"
 						onPress={() => useChosenPoke(setRandomPokemon)}
 					></Button>
+					<Button title="Enviar" onPress={handleComparison} />
 				</View>
 			)}
 			<Body />
