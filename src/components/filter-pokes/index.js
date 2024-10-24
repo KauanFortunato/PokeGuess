@@ -1,7 +1,11 @@
-import { View, Image, Text, FlatList } from 'react-native';
+import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
 export default function FilterPokes(props) {
+	function pokemonChosen(pokemonName) {
+		props.setPokeTerm(pokemonName);
+	}
+
 	return (
 		<View style={styles.suggestionsContainer}>
 			<FlatList
@@ -9,11 +13,13 @@ export default function FilterPokes(props) {
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item }) => (
 					<View style={styles.searchblock}>
-						<Image
-							style={styles.searchImgPoke}
-							source={{ uri: `data:image/png;base64,${item.imagem}` }}
-						/>
-						<Text style={styles.pokemonName}>{item.nome}</Text>
+						<TouchableOpacity
+							style={styles.buttonPokes}
+							onPress={() => pokemonChosen(item.nome)}
+						>
+							<Image style={styles.searchImgPoke} source={{ uri: item.img_poke }} />
+							<Text style={styles.pokemonName}>{item.nome}</Text>
+						</TouchableOpacity>
 					</View>
 				)}
 				style={styles.flatList}

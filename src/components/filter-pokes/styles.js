@@ -14,7 +14,14 @@ const styles = StyleSheet.create({
 	searchblock: {
 		flexDirection: 'row',
 		alignItems: 'center',
+	},
+	buttonPokes: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		width: '100%',
 		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: '#D4D4D4',
 	},
 	searchImgPoke: {
 		width: 40,

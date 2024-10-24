@@ -31,7 +31,11 @@ export default function App() {
 				onChangeText={setPokeTerm}
 			/>
 			{/* Componente onde mostra os pokémons sugeridos de acordo com o input do usuário */}
-			<FilterPokes filteredPokemons={filteredPokemons} />
+			<FilterPokes
+				filteredPokemons={filteredPokemons}
+				setPokeTerm={setPokeTerm}
+				pokeTerm={pokeTerm}
+			/>
 
 			{/* Pode tirar se necessário */}
 			{randomPokemon && (

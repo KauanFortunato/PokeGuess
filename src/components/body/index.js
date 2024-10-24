@@ -6,7 +6,7 @@ const Body = () => {
 	return (
 		<View style={styles.container}>
 			<ScrollView style={styles.container_list}>
-				{Array(20)
+				{Array(10)
 					.fill(null)
 					.map((_, index) => (
 						<View key={index} style={styles.container_entreview}>
@@ -27,7 +27,7 @@ const Body = () => {
 									{ title: 'Tipo 2', info: 'Nenhum' },
 									{ title: 'Habitat', info: 'Savana' },
 									{ title: 'Cor', info: 'Marrom' },
-									{ title: 'Evolução', info: 'Sim, 2ª Evolução' },
+									{ title: 'Evolução', info: '2ª' },
 								].map((item, idx) => (
 									<View key={idx} style={styles.container_cubeinfo}>
 										<View style={styles.cubeinfo_title}>
