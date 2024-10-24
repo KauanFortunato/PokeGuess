@@ -10,12 +10,11 @@ const styles = StyleSheet.create({
 	container_search: {
 		width: '100%',
 		alignItems: 'center',
-		padding: 20,
+		padding: 16,
 	},
 	search_title: {
-		fontSize: 18,
+		fontSize: 20,
 		fontWeight: 'bold',
-		margin: 5,
 		color: '#fffafa',
 	},
 });
