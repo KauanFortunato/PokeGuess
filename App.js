@@ -6,20 +6,21 @@ import Header from './src/components/header';
 import Search from './src/components/search';
 import Body from './src/components/body';
 import { useChosenPoke } from './src/functions/chosen-poke/index';
-import { comparePokemons } from './src/firebase/api/compare-poke/comparePokemons';
+import { comparePokemons } from './src/firebase/api/compare-poke/index';
 
 export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
 	const [pokeTerm, setPokeTerm] = useState(''); // Variavel onde é guardado qual o pokémon que a pessoa está digitando
 	const [randomPokemon, setRandomPokemon] = useState(null); // Variavel onde o pokemon randomizado é guardado
 	const [comparisonResult, setComparisonResult] = useState(''); // Variável para armazenar o resultado da comparação
+	const [pokemonGuesses, setpokemonGuesses] = useState([]);
 
 	useEffect(() => {
 		useChosenPoke(setRandomPokemon); // Essa função é chamada toda vez que a pessoa atualiza o app
 	}, [useChosenPoke]);
 
 	useEffect(() => {
-		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o app
+		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o pokeTerm
 	}, [pokeTerm]);
 
 	const handleComparison = () => {
@@ -27,10 +28,6 @@ export default function App() {
 			const result = comparePokemons(pokeTerm, randomPokemon);
 			setComparisonResult(result);
 		}
-	};
-
-	const handleSubmit = () => {
-		handleComparison();
 	};
 
 	return (
@@ -46,12 +43,15 @@ export default function App() {
 			{/* Componente onde mostra os pokémons sugeridos de acordo com o input do usuário */}
 			<FilterPokes
 				filteredPokemons={filteredPokemons}
-				setPokeTerm={setPokeTerm}
 				pokeTerm={pokeTerm}
+				setPokeTerm={setPokeTerm}
+				randomPokemon={randomPokemon}
+				setpokemonGuesses={setpokemonGuesses}
+				pokemonGuesses={pokemonGuesses}
 			/>
 
 			{/* Pode tirar se necessário */}
-			{randomPokemon && (
+			{/* {randomPokemon && (
 				<View>
 					<Text>Nome: {randomPokemon.nome}</Text>
 					<Text>Tipo 1: {randomPokemon.tipo1}</Text>
@@ -65,8 +65,8 @@ export default function App() {
 					></Button>
 					<Button title="Enviar" onPress={handleComparison} />
 				</View>
-			)}
-			<Body />
+			)} */}
+			<Body pokemonGuesses={pokemonGuesses} />
 		</View>
 	);
 }

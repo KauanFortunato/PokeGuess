@@ -12,7 +12,7 @@ const getRandomPokemon = async () => {
 
 		if (pokemonList.length > 0) {
 			const randomIndex = Math.floor(Math.random() * pokemonList.length);
-			console.log(pokemonList[randomIndex]);
+			// console.log(pokemonList[randomIndex]);
 			return pokemonList[randomIndex];
 		}
 	} catch (error) {

@@ -1,9 +1,16 @@
+import React, { useState } from 'react';
 import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
+import { comparePokemons } from '../../firebase/api/compare-poke';
 
 export default function FilterPokes(props) {
-	function pokemonChosen(pokemonName) {
-		props.setPokeTerm(pokemonName);
+	function pokemonChosen(item) {
+		props.setPokeTerm(item.nome);
+		comparePokemons(item, props.randomPokemon);
+		props.setpokemonGuesses([...props.pokemonGuesses, item]);
+
+		// Limpa o campo de entrada
+		props.setPokeTerm('');
 	}
 
 	return (
@@ -15,7 +22,7 @@ export default function FilterPokes(props) {
 					<View style={styles.searchblock}>
 						<TouchableOpacity
 							style={styles.buttonPokes}
-							onPress={() => pokemonChosen(item.nome)}
+							onPress={() => pokemonChosen(item)}
 						>
 							<Image style={styles.searchImgPoke} source={{ uri: item.img_poke }} />
 							<Text style={styles.pokemonName}>{item.nome}</Text>

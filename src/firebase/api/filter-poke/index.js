@@ -7,7 +7,6 @@ export const FilterPoke = async (term, setFilteredPokemons) => {
 		setFilteredPokemons([]);
 		return;
 	}
-	// console.log('Term: ', term);
 
 	try {
 		const pokemonQuery = query(

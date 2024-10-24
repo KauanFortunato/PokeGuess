@@ -2,32 +2,33 @@ import React from 'react';
 import { View, Image, Text, ScrollView } from 'react-native';
 import styles from './styles';
 
-const Body = () => {
+const Body = ({ pokemonGuesses }) => {
 	return (
 		<View style={styles.container}>
 			<ScrollView style={styles.container_list}>
-				{Array(10)
-					.fill(null)
-					.map((_, index) => (
+				{pokemonGuesses
+					.slice()
+					.reverse()
+					.map((pokemon, index) => (
 						<View key={index} style={styles.container_entreview}>
 							<View style={styles.pokeimgname}>
 								<View style={styles.container_pokename}>
-									<Text style={styles.pokename}>Kangaskhan</Text>
+									<Text style={styles.pokename}>{pokemon.nome}</Text>
 								</View>
 								<View style={styles.container_pokeimg}>
 									<Image
-										source={require('./115Kangaskhan.webp')}
+										source={{ uri: pokemon.img_poke }} // Supondo que a imagem venha de uma URL
 										style={styles.pokeimg}
 									/>
 								</View>
 							</View>
 							<View style={styles.container_pokeinfo}>
 								{[
-									{ title: 'Tipo 1', info: 'Normal' },
-									{ title: 'Tipo 2', info: 'Nenhum' },
-									{ title: 'Habitat', info: 'Savana' },
-									{ title: 'Cor', info: 'Marrom' },
-									{ title: 'Evolução', info: '2ª' },
+									{ title: 'Tipo 1', info: pokemon.tipo1 },
+									{ title: 'Tipo 2', info: pokemon.tipo2 || 'Nenhum' },
+									{ title: 'Habitat', info: pokemon.habitat },
+									{ title: 'Cor', info: pokemon.cor },
+									{ title: 'Evolução', info: pokemon.numero_evolucao },
 								].map((item, idx) => (
 									<View key={idx} style={styles.container_cubeinfo}>
 										<View style={styles.cubeinfo_title}>
