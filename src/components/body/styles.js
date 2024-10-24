@@ -2,20 +2,26 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 6,
-		width: '100%',
-		flexDirection: 'column',
+		flex: 1,
+		width: '99%',
+		height: 100,
 		borderRadius: 8,
 		padding: 5,
+		marginTop: 0,
 		alignItems: 'center',
+	},
+	scrollContent: {
+		flexGrow: 1,
+		paddingBottom: 10,
 	},
 	container_entreview: {
 		width: '100%',
+		height: 150,
 		flexDirection: 'row',
 		padding: 5,
 		backgroundColor: 'white',
 		borderRadius: 8,
-		margin: 5,
+		marginVertical: 5,
 		justifyContent: 'space-between',
 	},
 	pokeimgname: {

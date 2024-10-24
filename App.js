@@ -24,14 +24,12 @@ export default function App() {
 		<View style={styles.container}>
 			<Header />
 			<Search />
-
 			<TextInput
 				style={styles.input}
 				placeholder="Nome do Pokémon..."
 				value={pokeTerm}
 				onChangeText={setPokeTerm}
 			/>
-
 			{/* Componente onde mostra os pokémons sugeridos de acordo com o input do usuário */}
 			<FilterPokes filteredPokemons={filteredPokemons} />
 
@@ -57,17 +55,18 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 5,
+		flex: 2,
 		backgroundColor: '#7971A0',
 		alignItems: 'center',
+		justifyContent: 'center',
 	},
-
 	input: {
 		height: 50,
-		margin: 12,
+		margin: 10,
 		borderWidth: 0.5,
-		width: 286,
+		width: 330,
 		padding: 10,
+		marginBottom: 2,
 		backgroundColor: '#ffff',
 		borderRadius: 8,
 	},

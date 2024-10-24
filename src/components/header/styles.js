@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flex: 2,
 		alignItems: 'flex-start',
-		margin: 5,
+		margin: 10,
 	},
 	button_help: {
 		width: 20,
