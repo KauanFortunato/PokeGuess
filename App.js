@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, FlatList, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, StatusBar } from 'react-native';
 import { FilterPoke } from './src/firebase/api/filter-poke';
 import FilterPokes from './src/components/filter-pokes/index';
 import Header from './src/components/header';
@@ -12,7 +12,11 @@ export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
 	const [pokeTerm, setPokeTerm] = useState(''); // Variavel onde é guardado qual o pokémon que a pessoa está digitando
 	const [randomPokemon, setRandomPokemon] = useState(null); // Variavel onde o pokemon randomizado é guardado
-	const [pokemonGuesses, setpokemonGuesses] = useState([]);
+	const [pokemonGuesses, setpokemonGuesses] = useState([]); // Variavel onde fica os pokemons já tentados
+
+	useEffect(() => {
+		console.log(randomPokemon);
+	}, [randomPokemon]);
 
 	useEffect(() => {
 		useChosenPoke(setRandomPokemon); // Essa função é chamada toda vez que a pessoa atualiza o app
@@ -55,10 +59,10 @@ export default function App() {
 						title="Sortear Pokémon"
 						onPress={() => useChosenPoke(setRandomPokemon)}
 					></Button>
-					<Button title="Enviar" onPress={handleComparison} />
 				</View>
 			)} */}
 			<Body pokemonGuesses={pokemonGuesses} />
+			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
 		</View>
 	);
 }

@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		padding: 5,
 		borderRadius: 8,
-		backgroundColor: '#01d0c3',
 	},
 	infotitle: {
 		textAlign: 'center',
@@ -79,6 +78,13 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		color: 'white',
 		fontWeight: 'bold',
+	},
+
+	greenBackground: {
+		backgroundColor: '#01d0c3',
+	},
+	redBackground: {
+		backgroundColor: '#F40B5A',
 	},
 });
 

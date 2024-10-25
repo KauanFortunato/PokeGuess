@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import { comparePokemons } from '../../firebase/api/compare-poke';
 
 export default function FilterPokes(props) {
+	useEffect(() => {
+		console.log(props.pokemonGuesses);
+	}, [props.pokemonGuesses]);
+
 	function pokemonChosen(item) {
 		props.setPokeTerm(item.nome);
 		const comparisionResult = comparePokemons(item, props.randomPokemon);
@@ -12,7 +16,6 @@ export default function FilterPokes(props) {
 			...props.pokemonGuesses,
 			{ pokemon: item, comparision: comparisionResult },
 		]);
-		console.log(props.pokemonGuesses);
 
 		// Limpa o campo de entrada
 		props.setPokeTerm('');
