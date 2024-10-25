@@ -6,8 +6,13 @@ import { comparePokemons } from '../../firebase/api/compare-poke';
 export default function FilterPokes(props) {
 	function pokemonChosen(item) {
 		props.setPokeTerm(item.nome);
-		comparePokemons(item, props.randomPokemon);
-		props.setpokemonGuesses([...props.pokemonGuesses, item]);
+		const comparisionResult = comparePokemons(item, props.randomPokemon);
+
+		props.setpokemonGuesses([
+			...props.pokemonGuesses,
+			{ pokemon: item, comparision: comparisionResult },
+		]);
+		console.log(props.pokemonGuesses);
 
 		// Limpa o campo de entrada
 		props.setPokeTerm('');

@@ -12,7 +12,6 @@ export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
 	const [pokeTerm, setPokeTerm] = useState(''); // Variavel onde é guardado qual o pokémon que a pessoa está digitando
 	const [randomPokemon, setRandomPokemon] = useState(null); // Variavel onde o pokemon randomizado é guardado
-	const [comparisonResult, setComparisonResult] = useState(''); // Variável para armazenar o resultado da comparação
 	const [pokemonGuesses, setpokemonGuesses] = useState([]);
 
 	useEffect(() => {
@@ -22,13 +21,6 @@ export default function App() {
 	useEffect(() => {
 		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o pokeTerm
 	}, [pokeTerm]);
-
-	const handleComparison = () => {
-		if (randomPokemon) {
-			const result = comparePokemons(pokeTerm, randomPokemon);
-			setComparisonResult(result);
-		}
-	};
 
 	return (
 		<View style={styles.container}>

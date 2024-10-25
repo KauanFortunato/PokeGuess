@@ -17,7 +17,7 @@ const Body = ({ pokemonGuesses }) => {
 								</View>
 								<View style={styles.container_pokeimg}>
 									<Image
-										source={{ uri: pokemon.img_poke }} // Supondo que a imagem venha de uma URL
+										source={{ uri: pokemon.img_poke }}
 										style={styles.pokeimg}
 									/>
 								</View>
