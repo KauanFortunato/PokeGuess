@@ -60,6 +60,8 @@ const Body = ({ pokemonGuesses }) => {
 												styles.pokeinfo,
 												item.comparison === 'true'
 													? styles.greenBackground
+													: item.comparison === 'parcial'
+													? styles.yellowBackground
 													: styles.redBackground,
 											]}
 										>

@@ -7,17 +7,27 @@ export const comparePokemons = (inputPokemon, randomPokemon) => {
 			? 'true'
 			: 'false';
 
-	// Comparar tipo1
-	result.tipo1 =
-		(inputPokemon.tipo1?.toLowerCase() || '') === (randomPokemon.tipo1?.toLowerCase() || '')
-			? 'true'
-			: 'false';
+	// Comparar tipo1 com possibilidade de resultado "parcial"
+	if ((inputPokemon.tipo1?.toLowerCase() || '') === (randomPokemon.tipo1?.toLowerCase() || '')) {
+		result.tipo1 = 'true';
+	} else if (
+		(inputPokemon.tipo1?.toLowerCase() || '') === (randomPokemon.tipo2?.toLowerCase() || '')
+	) {
+		result.tipo1 = 'parcial';
+	} else {
+		result.tipo1 = 'false';
+	}
 
-	// Comparar tipo2, se ambos forem null será true, se um for null e outro não, será false
-	result.tipo2 =
-		(inputPokemon.tipo2?.toLowerCase() || null) === (randomPokemon.tipo2?.toLowerCase() || null)
-			? 'true'
-			: 'false';
+	// Comparar tipo2 com possibilidade de resultado "parcial"
+	if ((inputPokemon.tipo2?.toLowerCase() || '') === (randomPokemon.tipo2?.toLowerCase() || '')) {
+		result.tipo2 = 'true';
+	} else if (
+		(inputPokemon.tipo2?.toLowerCase() || '') === (randomPokemon.tipo1?.toLowerCase() || '')
+	) {
+		result.tipo2 = 'parcial';
+	} else {
+		result.tipo2 = 'false';
+	}
 
 	// Comparar cor
 	result.cor =

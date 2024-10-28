@@ -46,21 +46,6 @@ export default function App() {
 				pokemonGuesses={pokemonGuesses}
 			/>
 
-			{/* Pode tirar se necessário */}
-			{/* {randomPokemon && (
-				<View>
-					<Text>Nome: {randomPokemon.nome}</Text>
-					<Text>Tipo 1: {randomPokemon.tipo1}</Text>
-					<Text>Tipo 2: {randomPokemon.tipo2}</Text>
-					<Text>Cor: {randomPokemon.cor}</Text>
-					<Text>Habitat: {randomPokemon.habitat}</Text>
-
-					<Button
-						title="Sortear Pokémon"
-						onPress={() => useChosenPoke(setRandomPokemon)}
-					></Button>
-				</View>
-			)} */}
 			<Body pokemonGuesses={pokemonGuesses} />
 			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
 		</View>

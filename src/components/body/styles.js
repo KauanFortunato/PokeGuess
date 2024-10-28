@@ -86,6 +86,9 @@ const styles = StyleSheet.create({
 	redBackground: {
 		backgroundColor: '#F40B5A',
 	},
+	yellowBackground: {
+		backgroundColor: '#DEB307',
+	},
 });
 
 export default styles;
