@@ -7,6 +7,7 @@ import Search from './src/components/search';
 import Body from './src/components/body';
 import { useChosenPoke } from './src/functions/chosen-poke/index';
 import { comparePokemons } from './src/firebase/api/compare-poke/index';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
@@ -45,7 +46,6 @@ export default function App() {
 				setpokemonGuesses={setpokemonGuesses}
 				pokemonGuesses={pokemonGuesses}
 			/>
-
 			<Body pokemonGuesses={pokemonGuesses} />
 			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
 		</View>

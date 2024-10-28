@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
 		marginVertical: 5,
 		justifyContent: 'space-between',
 	},
+	textAttempt: {
+		color: '#C1C1C1',
+	},
 	pokeimgname: {
 		width: '30%',
 		justifyContent: 'center',

@@ -1,27 +1,22 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
-		height: 80,
+		height: '8%',
 		width: '100%',
-		marginTop: '8%',
-		borderBottomWidth: 0.8,
-		borderBottomColor: '#fffafa',
+		marginTop: Platform.OS === 'ios' ? 44 : 0,
+		borderBottomWidth: 0.9,
+		borderBottomColor: '#111',
+		justifyContent: 'center',
 	},
-	container_help: {
-		width: '100%',
-		flex: 2,
-		alignItems: 'flex-start',
-		margin: 10,
+	container_utility: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingHorizontal: 20,
 	},
 	button_help: {
-		width: 20,
-		height: 20,
-		borderRadius: 20,
-		backgroundColor: '#rgba(255, 255, 255, .1)',
-		borderColor: '#fffafa',
-		borderWidth: 1.5,
+		borderRadius: 50,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -32,15 +27,14 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	container_logo: {
-		flex: 4,
-		margin: 30,
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	logo: {
-		width: '50%',
-		height: 'auto',
-		padding: 25,
+		width: '60%',
+		height: '100%',
+		// padding: 24,
 		justifyContent: 'center',
 		alignItems: 'center',
 		resizeMode: 'center',

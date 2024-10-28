@@ -5,6 +5,7 @@ import styles from './styles';
 const Body = ({ pokemonGuesses }) => {
 	return (
 		<View style={styles.container}>
+			<Text style={styles.textAttempt}>Tentativas: {pokemonGuesses.length}</Text>
 			<ScrollView style={styles.container_list}>
 				{pokemonGuesses
 					.slice()
