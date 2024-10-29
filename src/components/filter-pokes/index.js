@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import { comparePokemons } from '../../firebase/api/compare-poke';

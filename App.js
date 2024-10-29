@@ -1,23 +1,38 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, StatusBar, Image } from 'react-native';
 import { FilterPoke } from './src/firebase/api/filter-poke';
 import FilterPokes from './src/components/filter-pokes/index';
 import Header from './src/components/header';
 import Search from './src/components/search';
 import Body from './src/components/body';
+import ConectionFailed from './src/components/conection-failed';
 import { useChosenPoke } from './src/functions/chosen-poke/index';
-import { comparePokemons } from './src/firebase/api/compare-poke/index';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import NetInfo from '@react-native-community/netinfo';
 
 export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
 	const [pokeTerm, setPokeTerm] = useState(''); // Variavel onde é guardado qual o pokémon que a pessoa está digitando
 	const [randomPokemon, setRandomPokemon] = useState(null); // Variavel onde o pokemon randomizado é guardado
 	const [pokemonGuesses, setpokemonGuesses] = useState([]); // Variavel onde fica os pokemons já tentados
+	const [isConnected, setIsConnected] = useState(true);
 
 	useEffect(() => {
-		console.log(randomPokemon);
-	}, [randomPokemon]);
+		const unsubscribe = NetInfo.addEventListener((state) => {
+			setIsConnected(state.isConnected);
+		});
+
+		return () => {
+			unsubscribe();
+		};
+	}, []);
+
+	useEffect(() => {
+		console.log(isConnected);
+	}, [isConnected]);
+
+	// useEffect(() => {
+	// 	console.log(randomPokemon);
+	// }, [randomPokemon]);
 
 	useEffect(() => {
 		useChosenPoke(setRandomPokemon); // Essa função é chamada toda vez que a pessoa atualiza o app
@@ -27,8 +42,19 @@ export default function App() {
 		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o pokeTerm
 	}, [pokeTerm]);
 
+	if (isConnected) {
+		return (
+			<View style={styles.container}>
+				<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
+				<ConectionFailed />
+			</View>
+		);
+	}
+
 	return (
 		<View style={styles.container}>
+			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
+
 			<Header />
 			<Search />
 			<TextInput
@@ -47,7 +73,6 @@ export default function App() {
 				pokemonGuesses={pokemonGuesses}
 			/>
 			<Body pokemonGuesses={pokemonGuesses} />
-			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
 		</View>
 	);
 }
@@ -68,5 +93,15 @@ const styles = StyleSheet.create({
 		marginBottom: 2,
 		backgroundColor: '#ffff',
 		borderRadius: 8,
+	},
+	errorText: {
+		fontSize: 18,
+		color: 'red',
+		marginBottom: 20,
+	},
+	image: {
+		width: 200, // Ajuste o tamanho conforme necessário
+		height: 200,
+		marginBottom: 20,
 	},
 });
