@@ -26,10 +26,6 @@ export default function App() {
 		};
 	}, []);
 
-	useEffect(() => {
-		console.log(isConnected);
-	}, [isConnected]);
-
 	// useEffect(() => {
 	// 	console.log(randomPokemon);
 	// }, [randomPokemon]);
@@ -42,11 +38,11 @@ export default function App() {
 		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o pokeTerm
 	}, [pokeTerm]);
 
-	if (isConnected) {
+	if (!isConnected) {
 		return (
 			<View style={styles.container}>
 				<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
-				<ConectionFailed />
+				<ConectionFailed setIsConnected={setIsConnected} />
 			</View>
 		);
 	}
