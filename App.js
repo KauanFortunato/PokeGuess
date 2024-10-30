@@ -41,7 +41,7 @@ export default function App() {
 	if (!isConnected) {
 		return (
 			<View style={styles.container}>
-				<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
+				<StatusBar barStyle="light-content" backgroundColor="#111" />
 				<ConectionFailed setIsConnected={setIsConnected} />
 			</View>
 		);
@@ -49,7 +49,7 @@ export default function App() {
 
 	return (
 		<View style={styles.container}>
-			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
+			<StatusBar barStyle="light-content" backgroundColor="#111" />
 
 			<Header />
 			<Search />
