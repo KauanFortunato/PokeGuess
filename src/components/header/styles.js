@@ -39,17 +39,28 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	modalContent: {
-		width: 330,
-		height: 240,
+		width: '90%',
+		height: '40%',
 		padding: 20,
 		backgroundColor: 'white',
 		borderRadius: 10,
 		position: 'relative',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	modalText: {
-		marginTop: 22,
+		marginTop: 10,
 		fontSize: 14,
 		textAlign: 'center',
+	},
+	helpImage: {
+		width: 300,
+		height: 80,
+		borderRadius: 10,
+		borderColor: 'black',
+		borderWidth: 2,
+		marginTop: 20,
 	},
 	closeButton: {
 		position: 'absolute',
@@ -61,6 +72,38 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
+	},
+	titleHelp: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		textAlign: 'center',
+	},
+	subTitleHelp: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		textAlign: 'center',
+		marginTop: 20,
+	},
+	colorLegendContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		width: '100%',
+		marginTop: 0,
+	},
+
+	colorBoxContainer: {
+		alignItems: 'center',
+	},
+	colorBox: {
+		width: 20,
+		height: 20,
+		borderRadius: 5,
+		marginBottom: 5,
+	},
+
+	colorLabel: {
+		fontSize: 12,
+		textAlign: 'center',
 	},
 });
 

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import { comparePokemons } from '../../firebase/api/compare-poke';
 
 export default function FilterPokes(props) {
 	useEffect(() => {
-		console.log(props.pokemonGuesses);
+		console.log(props.randomPokemon);
 	}, [props.pokemonGuesses]);
 
 	function pokemonChosen(item) {

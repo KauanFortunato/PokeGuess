@@ -5,6 +5,7 @@ import FilterPokes from './src/components/filter-pokes/index';
 import Header from './src/components/header';
 import Search from './src/components/search';
 import Body from './src/components/body';
+import WinContainer from './src/components/win-container';
 import { useChosenPoke } from './src/functions/chosen-poke/index';
 
 export default function App() {
@@ -15,18 +16,30 @@ export default function App() {
 	const [win, setWin] = useState(false);
 
 	useEffect(() => {
-		// if (randomPokemon.nome === pokemonGuesses.at(-1).pokemon.nome) {
-		// 	console.log('Ola');
-		// }
-	}, [pokemonGuesses]);
-
-	useEffect(() => {
 		useChosenPoke(setRandomPokemon); // Essa função é chamada toda vez que a pessoa atualiza o app
 	}, [useChosenPoke]);
 
 	useEffect(() => {
 		FilterPoke(pokeTerm, setFilteredPokemons); // Essa função é chamada toda vez que a pessoa atualiza o pokeTerm
 	}, [pokeTerm]);
+
+	useEffect(() => {
+		if (randomPokemon !== null) {
+			console.log('Random: ' + randomPokemon.nome);
+			if (randomPokemon.nome === pokemonGuesses.at(-1).pokemon.nome) {
+				setWin(true);
+			}
+		}
+	}, [pokemonGuesses]);
+
+	const resetApp = () => {
+		setFilteredPokemons([]);
+		setPokeTerm('');
+		setRandomPokemon(null);
+		setPokemonGuesses([]);
+		setWin(false);
+		useChosenPoke(setRandomPokemon);
+	};
 
 	return (
 		<KeyboardAvoidingView
@@ -36,12 +49,21 @@ export default function App() {
 		>
 			<Header />
 			<Search />
-			<TextInput
-				style={styles.input}
-				placeholder="Nome do Pokémon..."
-				value={pokeTerm}
-				onChangeText={setPokeTerm}
-			/>
+
+			{!win ? (
+				<TextInput
+					style={styles.input}
+					placeholder="Nome do Pokémon..."
+					value={pokeTerm}
+					onChangeText={setPokeTerm}
+				/>
+			) : (
+				<WinContainer
+					pokemonGuesses={pokemonGuesses}
+					randomPokemon={randomPokemon}
+					resetApp={resetApp}
+				/>
+			)}
 
 			{/* Componente onde mostra os pokémons sugeridos de acordo com o input do usuário */}
 			<FilterPokes

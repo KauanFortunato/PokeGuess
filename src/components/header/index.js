@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
-import {
-	SafeAreaView,
-	View,
-	Image,
-	TouchableOpacity,
-	Keyboard,
-	Modal,
-	Text,
-	Switch,
-} from 'react-native';
+import { SafeAreaView, View, Image, TouchableOpacity, Keyboard, Modal, Text } from 'react-native';
 import styles from './styles';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Header = () => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalText, setModalText] = useState('');
-	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	const handleButtonPress = (text) => {
 		Keyboard.dismiss();
@@ -29,10 +18,6 @@ const Header = () => {
 		setModalVisible(false);
 	};
 
-	const toggleDarkMode = () => {
-		setIsDarkMode((prevMode) => !prevMode);
-	};
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.container_utility}>
@@ -40,7 +25,7 @@ const Header = () => {
 					style={styles.button_help}
 					onPress={() =>
 						handleButtonPress(
-							'Ao entrar no app, um Pokémon é sorteado. Você tem várias tentativas para adivinhar o Pokémon. À medida que adiciona palpites, descobrirá algumas características dos Pokémon tendo tambem ajuda da barra de pesquisa. Use essas pistas para tentar acertar o Pokémon o mais rápido possível!'
+							'Escreva o nome de um Pokémon e verifique suas características e o quão próximo ele está do Pokémon escondido.'
 						)
 					}
 				>
@@ -66,9 +51,32 @@ const Header = () => {
 				<View style={styles.modalContainer}>
 					<View style={styles.modalContent}>
 						<TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-							<AntDesign name="closecircle" size={24} color="#7971A0" />
+							<AntDesign name="closecircleo" size={24} color="black" />
 						</TouchableOpacity>
+
+						<Text style={styles.titleHelp}>Como Jogar</Text>
 						<Text style={styles.modalText}>{modalText}</Text>
+						<Image
+							source={require('../../../assets/img/ajuda-img.png')}
+							style={styles.helpImage}
+							resizeMode="contain"
+						/>
+
+						<Text style={styles.subTitleHelp}>Cores</Text>
+						<View style={styles.colorLegendContainer}>
+							<View style={styles.colorBoxContainer}>
+								<View style={[styles.colorBox, { backgroundColor: '#01D0C3' }]} />
+								<Text style={styles.colorLabel}>Correto</Text>
+							</View>
+							<View style={styles.colorBoxContainer}>
+								<View style={[styles.colorBox, { backgroundColor: '#DEB307' }]} />
+								<Text style={styles.colorLabel}>Parcial</Text>
+							</View>
+							<View style={styles.colorBoxContainer}>
+								<View style={[styles.colorBox, { backgroundColor: '#F40B5A' }]} />
+								<Text style={styles.colorLabel}>Incorreto</Text>
+							</View>
+						</View>
 					</View>
 				</View>
 			</Modal>

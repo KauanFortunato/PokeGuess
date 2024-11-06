@@ -10,8 +10,6 @@ export const randomPoke = async (setPokemon) => {
 
 			const randomPokemon = pokemonList[Math.floor(Math.random() * pokemonList.length)];
 
-			console.log('Pokémon sorteado com sucesso:', randomPokemon);
-
 			setPokemon(randomPokemon);
 		} else {
 			Alert.alert('Erro', 'Não foi possível encontrar nenhum Pokémon.');
