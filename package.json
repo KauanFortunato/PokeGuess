@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@react-native-community/netinfo": "^11.4.1",
     "@react-native-firebase/app": "^21.2.0",
     "@react-native-firebase/firestore": "^21.2.0",
     "expo": "^51.0.38",

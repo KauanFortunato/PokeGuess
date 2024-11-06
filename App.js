@@ -75,7 +75,7 @@ export default function App() {
 				pokemonGuesses={pokemonGuesses}
 			/>
 			<Body pokemonGuesses={pokemonGuesses} />
-			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
+			<StatusBar barStyle="light-content" backgroundColor="#000" />
 		</KeyboardAvoidingView>
 	);
 }
@@ -95,5 +95,15 @@ const styles = StyleSheet.create({
 		padding: 10,
 		backgroundColor: '#ffff',
 		borderRadius: 8,
+	},
+	errorText: {
+		fontSize: 18,
+		color: 'red',
+		marginBottom: 20,
+	},
+	image: {
+		width: 200, // Ajuste o tamanho conforme necessário
+		height: 200,
+		marginBottom: 20,
 	},
 });
