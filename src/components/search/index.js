@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-	View,
-	Image,
-	TouchableOpacity,
-	setSearchText,
-	searchText,
-	TextInput,
-	Text,
-} from 'react-native';
+import { View, Text } from 'react-native';
 import styles from './styles';
 
 const Search = () => {

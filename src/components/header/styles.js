@@ -1,43 +1,66 @@
-import React from 'react';
 import { StyleSheet, Dimensions, Platform } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 	container: {
-		height: '8%',
+		height: height * 0.1,
 		width: '100%',
-		marginTop: Platform.OS === 'ios' ? 44 : 0,
 		borderBottomWidth: 0.9,
 		borderBottomColor: '#111',
 		justifyContent: 'center',
+		alignContent: 'center',
+		flexShrink: 0,
 	},
 	container_utility: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: 20,
+		alignItems: 'center',
 	},
 	button_help: {
-		borderRadius: 50,
+		position: 'absolute',
+		paddingHorizontal: 20,
 		alignItems: 'center',
 		justifyContent: 'center',
-	},
-	button_helpText: {
-		textAlign: 'center',
-		fontSize: 12,
-		color: '#fff',
-		fontWeight: 'bold',
 	},
 	container_logo: {
 		flex: 1,
-		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	logo: {
-		width: '60%',
-		height: '100%',
-		// padding: 24,
+		width: '50%',
+		height: '70%',
+		resizeMode: 'contain',
+	},
+	// Estilos do Modal
+	modalContainer: {
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		resizeMode: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+	},
+	modalContent: {
+		width: 330,
+		height: 240,
+		padding: 20,
+		backgroundColor: 'white',
+		borderRadius: 10,
+		position: 'relative',
+	},
+	modalText: {
+		marginTop: 22,
+		fontSize: 14,
+		textAlign: 'center',
+	},
+	closeButton: {
+		position: 'absolute',
+		top: 10,
+		right: 10,
+	},
+	darkModeContainer: {
+		marginTop: 20,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 });
 

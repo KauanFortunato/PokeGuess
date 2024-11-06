@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, StatusBar } from 'react-native';
+import {
+	StyleSheet,
+	View,
+	TextInput,
+	StatusBar,
+	KeyboardAvoidingView,
+	Platform,
+} from 'react-native';
 import { FilterPoke } from './src/firebase/api/filter-poke';
 import FilterPokes from './src/components/filter-pokes/index';
 import Header from './src/components/header';
@@ -11,9 +18,9 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
-	const [pokeTerm, setPokeTerm] = useState(''); // Variavel onde é guardado qual o pokémon que a pessoa está digitando
-	const [randomPokemon, setRandomPokemon] = useState(null); // Variavel onde o pokemon randomizado é guardado
-	const [pokemonGuesses, setpokemonGuesses] = useState([]); // Variavel onde fica os pokemons já tentados
+	const [pokeTerm, setPokeTerm] = useState(''); // Variável onde é guardado qual o pokémon que a pessoa está digitando
+	const [randomPokemon, setRandomPokemon] = useState(null); // Variável onde o pokemon randomizado é guardado
+	const [pokemonGuesses, setPokemonGuesses] = useState([]); // Variável onde ficam os pokémons já tentados
 
 	useEffect(() => {
 		console.log(randomPokemon);
@@ -28,7 +35,11 @@ export default function App() {
 	}, [pokeTerm]);
 
 	return (
-		<View style={styles.container}>
+		<KeyboardAvoidingView
+			keyboardShouldPersistTaps="handled"
+			style={styles.container}
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+		>
 			<Header />
 			<Search />
 			<TextInput
@@ -43,29 +54,28 @@ export default function App() {
 				pokeTerm={pokeTerm}
 				setPokeTerm={setPokeTerm}
 				randomPokemon={randomPokemon}
-				setpokemonGuesses={setpokemonGuesses}
+				setpokemonGuesses={setPokemonGuesses}
 				pokemonGuesses={pokemonGuesses}
 			/>
 			<Body pokemonGuesses={pokemonGuesses} />
 			<StatusBar barStyle="light-content" backgroundColor="#4B3F67" />
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 2,
+		flex: 1,
 		backgroundColor: '#7971A0',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	input: {
 		height: 50,
-		margin: 10,
-		borderWidth: 0.5,
 		width: 330,
+		margin: 5,
+		borderWidth: 0.5,
 		padding: 10,
-		marginBottom: 2,
 		backgroundColor: '#ffff',
 		borderRadius: 8,
 	},

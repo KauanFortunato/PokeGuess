@@ -4,36 +4,34 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		width: '99%',
-		height: 100,
 		borderRadius: 8,
 		padding: 5,
-		marginTop: 0,
 		alignItems: 'center',
 	},
 	scrollContent: {
 		flexGrow: 1,
 		paddingBottom: 10,
 	},
+	container_list: {
+		width: '100%',
+	},
 	container_entreview: {
 		width: '100%',
-		height: 150,
+		height: 110,
 		flexDirection: 'row',
-		padding: 5,
+		padding: 4,
 		backgroundColor: 'white',
 		borderRadius: 8,
 		marginVertical: 5,
-		justifyContent: 'space-between',
 	},
 	textAttempt: {
 		color: '#C1C1C1',
 	},
 	pokeimgname: {
 		width: '30%',
+		height: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	container_pokename: {
-		paddingVertical: 5,
 	},
 	pokename: {
 		textAlign: 'center',
@@ -42,25 +40,25 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	container_pokeimg: {
-		width: '80%',
+		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	pokeimg: {
 		width: '100%',
-		height: 50,
+		height: '85%',
 		resizeMode: 'contain',
 	},
 	container_pokeinfo: {
-		width: '65%',
-		flexDirection: 'row',
+		width: '38%',
 		flexWrap: 'wrap',
-		justifyContent: 'space-between',
+		margin: 2,
 		alignItems: 'center',
 	},
 	container_cubeinfo: {
-		width: '48%',
-		marginBottom: 5,
+		width: '55%',
+		marginBottom: 3,
+		margin: 2,
 	},
 	cubeinfo_title: {
 		marginBottom: 3,

@@ -6,11 +6,15 @@ const styles = StyleSheet.create({
 		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
+		padding: 5,
+		margin: 5,
 	},
 	container_search: {
 		width: '100%',
 		alignItems: 'center',
-		padding: 16,
+		justifyContent: 'center',
+		margin: 0,
+		padding: 0,
 	},
 	search_title: {
 		fontSize: 20,

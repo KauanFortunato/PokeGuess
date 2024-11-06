@@ -24,6 +24,7 @@ export default function FilterPokes(props) {
 	return (
 		<View style={styles.suggestionsContainer}>
 			<FlatList
+				keyboardShouldPersistTaps="handled"
 				data={props.filteredPokemons}
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item }) => (
