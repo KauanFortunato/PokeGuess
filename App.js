@@ -1,30 +1,24 @@
 import { useEffect, useState } from 'react';
-import {
-	StyleSheet,
-	View,
-	TextInput,
-	StatusBar,
-	KeyboardAvoidingView,
-	Platform,
-} from 'react-native';
+import { StyleSheet, TextInput, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
 import { FilterPoke } from './src/firebase/api/filter-poke';
 import FilterPokes from './src/components/filter-pokes/index';
 import Header from './src/components/header';
 import Search from './src/components/search';
 import Body from './src/components/body';
 import { useChosenPoke } from './src/functions/chosen-poke/index';
-import { comparePokemons } from './src/firebase/api/compare-poke/index';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function App() {
 	const [filteredPokemons, setFilteredPokemons] = useState([]); // Pokémons filtrados da base de dados
 	const [pokeTerm, setPokeTerm] = useState(''); // Variável onde é guardado qual o pokémon que a pessoa está digitando
 	const [randomPokemon, setRandomPokemon] = useState(null); // Variável onde o pokemon randomizado é guardado
 	const [pokemonGuesses, setPokemonGuesses] = useState([]); // Variável onde ficam os pokémons já tentados
+	const [win, setWin] = useState(false);
 
 	useEffect(() => {
-		console.log(randomPokemon);
-	}, [randomPokemon]);
+		// if (randomPokemon.nome === pokemonGuesses.at(-1).pokemon.nome) {
+		// 	console.log('Ola');
+		// }
+	}, [pokemonGuesses]);
 
 	useEffect(() => {
 		useChosenPoke(setRandomPokemon); // Essa função é chamada toda vez que a pessoa atualiza o app
@@ -48,6 +42,7 @@ export default function App() {
 				value={pokeTerm}
 				onChangeText={setPokeTerm}
 			/>
+
 			{/* Componente onde mostra os pokémons sugeridos de acordo com o input do usuário */}
 			<FilterPokes
 				filteredPokemons={filteredPokemons}
