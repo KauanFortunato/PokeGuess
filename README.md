@@ -49,4 +49,3 @@ Este projeto está sob a licença [MIT](https://choosealicense.com/licenses/mit/
 #
 ![Logo](https://firebasestorage.googleapis.com/v0/b/pokeguess-3tgpsi.appspot.com/o/Logo%2Flogo.png?alt=media&token=77f5285f-a2b8-4d96-8950-19905834cdde)
 
-#
