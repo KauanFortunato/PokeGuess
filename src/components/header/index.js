@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
 import { SafeAreaView, View, Image, TouchableOpacity, Keyboard, Modal, Text } from 'react-native';
-=======
-import React from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
->>>>>>> feature/internet
 import styles from './styles';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';

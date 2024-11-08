@@ -1,34 +1,37 @@
 {
-	"expo": {
-		"name": "PokeGuess",
-		"slug": "PokeGuess",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "light",
-		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#7971A0"
-		},
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.dbkg.pokeguess"
-		},
-		"android": {
-			"package": "com.dbkg.pokeguess",
-			"versionCode": 1,
-			"permissions": ["INTERNET"],
-			"buildType": "apk",
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#7971A0"
-			}
-		},
-		"extra": {
-			"eas": {
-				"projectId": "3695c543-0af7-42a0-92f9-20720c748a86"
-			}
-		}
-	}
+  "expo": {
+    "name": "PokeGuess",
+    "slug": "PokeGuess",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#7971A0"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dbkg.pokeguess"
+    },
+    "android": {
+      "package": "com.dbkg.pokeguess",
+      "versionCode": 1,
+      "permissions": [
+        "INTERNET"
+      ],
+      "buildType": "apk",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#7971A0"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3695c543-0af7-42a0-92f9-20720c748a86"
+      }
+    },
+    "owner": "pokemontrainers"
+  }
 }
