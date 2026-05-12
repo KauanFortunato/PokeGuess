@@ -26,7 +26,7 @@ export const FilterPoke = async (term, setFilteredPokemons) => {
 				key: id,
 				nome: capitalize(p.name),
 				img_poke: getPokeSpriteUrl(id),
-				_apiName: p.name,
+				_apiId: id,
 			};
 		});
 

@@ -10,9 +10,10 @@ export default function FilterPokes(props) {
 	}, [props.pokemonGuesses]);
 
 	async function pokemonChosen(item) {
+		if (!props.randomPokemon) return;
 		try {
 			// item da lista tem apenas nome e sprite; busca dados completos antes de comparar
-			const pokemon = item._apiName ? await fetchPokemonData(item._apiName) : item;
+			const pokemon = item._apiId ? await fetchPokemonData(item._apiId) : item;
 			const comparisionResult = comparePokemons(pokemon, props.randomPokemon);
 
 			props.setpokemonGuesses([
