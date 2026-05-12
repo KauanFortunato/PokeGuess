@@ -124,6 +124,7 @@ export async function fetchPokemonData(nameOrId) {
 
 	pokemonCache.set(key, normalized);
 	pokemonCache.set(pokemon.id.toString(), normalized);
+	pokemonCache.set(pokemon.name, normalized);
 
 	return normalized;
 }
