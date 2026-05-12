@@ -1,24 +1,28 @@
 import React, { useEffect } from 'react';
 import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
-import { comparePokemons } from '../../firebase/api/compare-poke';
+import { comparePokemons } from '../../api/comparePoke';
+import { fetchPokemonData } from '../../api/pokeApiService';
 
 export default function FilterPokes(props) {
 	useEffect(() => {
 		console.log(props.randomPokemon);
 	}, [props.pokemonGuesses]);
 
-	function pokemonChosen(item) {
-		props.setPokeTerm(item.nome);
-		const comparisionResult = comparePokemons(item, props.randomPokemon);
+	async function pokemonChosen(item) {
+		try {
+			// item da lista tem apenas nome e sprite; busca dados completos antes de comparar
+			const pokemon = item._apiName ? await fetchPokemonData(item._apiName) : item;
+			const comparisionResult = comparePokemons(pokemon, props.randomPokemon);
 
-		props.setpokemonGuesses([
-			...props.pokemonGuesses,
-			{ pokemon: item, comparision: comparisionResult },
-		]);
-
-		// Limpa o campo de entrada
-		props.setPokeTerm('');
+			props.setpokemonGuesses([
+				...props.pokemonGuesses,
+				{ pokemon, comparision: comparisionResult },
+			]);
+			props.setPokeTerm('');
+		} catch (error) {
+			console.error('Erro ao selecionar Pokémon:', error);
+		}
 	}
 
 	return (

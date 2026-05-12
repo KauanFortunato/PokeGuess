@@ -1,4 +1,4 @@
-import getRandomPokemon from '../../firebase/api/randomPoke/index';
+import getRandomPokemon from '../../api/randomPoke';
 
 // Sortear Pokémon da base de dados
 export const useChosenPoke = async (setRandomPokemon) => {
