@@ -1,0 +1,47 @@
+@import '@fontsource/press-start-2p/400.css';
+@import '@fontsource/vt323/400.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html, body, #root {
+		height: 100%;
+	}
+	body {
+		margin: 0;
+		background: radial-gradient(ellipse at center, #1a1535 0%, #050410 70%);
+		color: #f4f0e8;
+		font-family: 'VT323', monospace;
+		-webkit-tap-highlight-color: transparent;
+		overscroll-behavior: none;
+	}
+	* {
+		box-sizing: border-box;
+	}
+	button {
+		font-family: inherit;
+	}
+	input {
+		font-family: inherit;
+	}
+}
+
+@layer utilities {
+	.safe-top {
+		padding-top: env(safe-area-inset-top, 0);
+	}
+	.safe-bottom {
+		padding-bottom: env(safe-area-inset-bottom, 0);
+	}
+	.pixel-render img {
+		image-rendering: pixelated;
+		image-rendering: crisp-edges;
+	}
+}
+
+img {
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
+}
