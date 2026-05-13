@@ -5,15 +5,15 @@
 <h1 align="center">PokeGuess — Retro Edition</h1>
 
 <p align="center">
-  <em>Adivinhe o Pokémon. Estilo Wordle, 898 criaturas, em pixel art retrô.</em>
+  <em>Adivinhe o Pokémon. Estilo Wordle, 898 criaturas, em pixel art retrô. Instalável como PWA.</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Expo-SDK%2054-000020?logo=expo&logoColor=white" alt="Expo SDK 54" />
-  <img src="https://img.shields.io/badge/React%20Native-0.81-61dafb?logo=react&logoColor=white" alt="React Native 0.81" />
+  <img src="https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white" alt="Vite 6" />
   <img src="https://img.shields.io/badge/React-19.1-61dafb?logo=react&logoColor=white" alt="React 19" />
+  <img src="https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss&logoColor=white" alt="Tailwind 3.4" />
+  <img src="https://img.shields.io/badge/PWA-installable-5a0fc8?logo=pwa&logoColor=white" alt="PWA" />
   <img src="https://img.shields.io/badge/license-MIT-ffd23f" alt="License MIT" />
-  <img src="https://img.shields.io/badge/platform-iOS%20%7C%20Android%20%7C%20Web-94a4c4" alt="Platforms" />
 </p>
 
 <p align="center">
@@ -36,11 +36,12 @@
 - 🧠 **6 colunas de comparação** por chute — Tipo, Geração (ou Evolução), Cor, Habitat, Altura, Peso, com indicadores ↑↓ pras diferenças numéricas
 - 💡 **Sistema de dicas** — após 10 chutes (Normal/Difícil), revele atributos do alvo um a um
 - 🪄 **Coluna dinâmica GER ↔ EVO** — quando só 1 geração é selecionada, a coluna troca pra Estágio de Evolução automaticamente
-- 📳 **Haptics nativos** — vibração diferente para match, partial, miss, win e lose
+- 📳 **Haptics** via `navigator.vibrate` (Android Chrome)
 - 🔊 **Cries oficiais** dos Pokémon na vitória e derrota (via PokeAPI)
-- 🎨 **Estética retrô** — Press Start 2P, sprites GB/GBA, paleta GB Color, scanlines
+- 🎨 **Estética retrô** — Press Start 2P, sprites GB/GBA, paleta GB Color
 - ⚡ **Prefetch inteligente** — as sugestões são pré-carregadas pra tap-to-submit ser instantâneo
-- 📱 **Cross-platform** — iOS (Expo Go), Android (Expo Go) e Web
+- 📱 **PWA instalável** — service worker offline + manifest, funciona como app nativo
+- 🌐 **108 KB gzipped** — bundle enxuto, carrega instantâneo
 
 ---
 
@@ -60,22 +61,28 @@
 
 ## 🚀 Rodar localmente
 
-Precisa de [Node.js 18+](https://nodejs.org/) e o app **[Expo Go](https://expo.dev/go)** no celular (Android ou iOS).
+Precisa de [Node.js 18+](https://nodejs.org/).
 
 ```bash
 git clone https://github.com/KauanFortunato/PokeGuess.git
 cd PokeGuess
 npm install
-npm start
+npm run dev
 ```
 
-Quando o terminal mostrar o QR code:
+Abre [http://localhost:5173](http://localhost:5173). O Vite mostra também o IP de rede pra testar no celular (mesma Wi-Fi).
 
-- **iPhone**: abra a câmera, mire no QR → toque no link que aparece → abre no Expo Go
-- **Android**: abra o Expo Go → "Scan QR code" → mire no terminal
-- **Web**: aperte `w` no terminal
+### Build de produção
 
-PC e celular devem estar no **mesmo Wi-Fi**. Se a rede bloquear (corporativa, etc.), use `npx expo start --tunnel`.
+```bash
+npm run build      # gera dist/
+npm run preview    # serve o dist/ localmente pra testar
+```
+
+### Instalar como PWA
+
+No Chrome (desktop ou Android): barra de endereço → ícone de "instalar".
+No iPhone Safari: Compartilhar → "Adicionar à Tela de Início".
 
 ---
 
@@ -83,38 +90,56 @@ PC e celular devem estar no **mesmo Wi-Fi**. Se a rede bloquear (corporativa, et
 
 | Camada | Tech |
 | --- | --- |
-| Runtime | [Expo SDK 54](https://expo.dev/) · [React Native 0.81](https://reactnative.dev/) · [React 19.1](https://react.dev/) |
-| Plataformas | iOS · Android · Web ([react-native-web](https://necolas.github.io/react-native-web/)) |
+| Build | [Vite 6](https://vitejs.dev/) |
+| UI | [React 19.1](https://react.dev/) + [Tailwind CSS 3.4](https://tailwindcss.com/) |
+| Animações | [framer-motion](https://www.framer.com/motion/) + CSS keyframes |
+| PWA | [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) (Workbox) |
 | API | [PokeAPI](https://pokeapi.co/) (sprites, dados de espécies, cadeias de evolução, cries) |
-| UI/UX | [expo-linear-gradient](https://docs.expo.dev/versions/latest/sdk/linear-gradient/) · [expo-font](https://docs.expo.dev/versions/latest/sdk/font/) · [react-native-safe-area-context](https://github.com/AppAndFlow/react-native-safe-area-context) |
-| Feedback | [expo-haptics](https://docs.expo.dev/versions/latest/sdk/haptics/) · [expo-audio](https://docs.expo.dev/versions/latest/sdk/audio/) |
-| Fontes | [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) + [VT323](https://fonts.google.com/specimen/VT323) |
+| Áudio | HTML5 `Audio` API |
+| Haptics | Web `navigator.vibrate` |
+| Fontes | [@fontsource/press-start-2p](https://fontsource.org/) + [VT323](https://fontsource.org/) (self-hosted, sem CDN) |
+| Helpers | [clsx](https://github.com/lukeed/clsx) |
 
 ---
 
 ## 📂 Estrutura
 
 ```
-src/
-├── api/
-│   ├── pokeApiService.js   # cliente PokeAPI: cache, prefetch, fetches paralelos
-│   ├── randomPoke.js       # sorteia Pokémon respeitando o filtro de geração
-│   ├── filterPoke.js       # filtra sugestões por nome + geração + prefetch
-│   └── comparePoke.js      # lógica de comparação dos 6 atributos
-├── game/
-│   ├── modes.js            # Normal / Difícil / Nightmare
-│   ├── gens.js             # ranges de gerações 1-8 e helpers
-│   ├── feedback.js         # haptics + mute global
-│   └── sound.js            # tocar cries da PokeAPI
-├── screens/
-│   ├── splash/             # tela inicial: silhuetas + mascote + POKE/GUESS
-│   ├── game/               # board 6×6, FlipCell, input com sugestões
-│   ├── win/                # orb spin + creature reveal + confete + cry
-│   ├── lose/               # shake + revelação da criatura
-│   └── settings/           # modal de ajustes (modo, gens, mute, desistir)
-├── theme/
-│   └── tokens.js           # cores, fontes
-└── App.js                  # state machine (splash → game → win/lose)
+.
+├── index.html
+├── package.json
+├── vite.config.js          # vite + plugin-pwa + plugin-react
+├── tailwind.config.js      # tokens do tema (cores, fontes, keyframes)
+├── postcss.config.js
+├── public/
+│   ├── icons/              # PWA icons (192, 512, 512-maskable)
+│   └── img/                # creature.png (mascote da splash)
+├── src/
+│   ├── api/
+│   │   ├── pokeApiService.js   # cliente PokeAPI: cache, prefetch, fetches paralelos
+│   │   ├── randomPoke.js       # sorteia Pokémon respeitando o filtro de geração
+│   │   ├── filterPoke.js       # filtra sugestões por nome + geração + prefetch
+│   │   └── comparePoke.js      # lógica de comparação dos 6 atributos
+│   ├── game/
+│   │   ├── modes.js            # Normal / Difícil / Nightmare
+│   │   ├── gens.js             # ranges de gerações 1-8 e helpers
+│   │   ├── feedback.js         # navigator.vibrate + mute global
+│   │   └── sound.js            # cries via HTML5 Audio
+│   ├── screens/
+│   │   ├── Splash.jsx          # tela inicial: silhuetas + mascote + POKE/GUESS
+│   │   ├── Game.jsx            # board 6×6, FlipCell, input com sugestões
+│   │   ├── Win.jsx             # orb spin + creature reveal + confete + cry
+│   │   ├── Lose.jsx            # shake + revelação da criatura
+│   │   └── Settings.jsx        # modal de ajustes
+│   ├── components/
+│   │   ├── Board.jsx
+│   │   ├── FlipCell.jsx        # 3D rotateX flip via CSS
+│   │   ├── GuessRow.jsx
+│   │   └── InputRow.jsx
+│   ├── App.jsx                 # state machine (splash → game → win/lose)
+│   ├── main.jsx                # entry point
+│   └── index.css               # Tailwind base + reset
+└── assets/                     # README assets (logo, demo.gif, demo.mp4)
 ```
 
 ---
