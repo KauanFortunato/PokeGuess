@@ -1,6 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	ActivityIndicator,
+	Animated,
+	Easing,
+	Image,
 	Platform,
 	StatusBar,
 	StyleSheet,
@@ -23,6 +26,64 @@ import GameScreen from './src/screens/game';
 import WinScreen from './src/screens/win';
 import LoseScreen from './src/screens/lose';
 import SettingsModal from './src/screens/settings';
+
+const CREATURE = require('./assets/img/creature.png');
+
+function LoadingScreen({ label, error }) {
+	const bob = useRef(new Animated.Value(0)).current;
+	const dots = useRef(new Animated.Value(0)).current;
+
+	useEffect(() => {
+		const bobLoop = Animated.loop(
+			Animated.sequence([
+				Animated.timing(bob, {
+					toValue: -8,
+					duration: 600,
+					easing: Easing.inOut(Easing.quad),
+					useNativeDriver: true,
+				}),
+				Animated.timing(bob, {
+					toValue: 0,
+					duration: 600,
+					easing: Easing.inOut(Easing.quad),
+					useNativeDriver: true,
+				}),
+			])
+		);
+		const dotsLoop = Animated.loop(
+			Animated.timing(dots, {
+				toValue: 3,
+				duration: 1200,
+				easing: Easing.linear,
+				useNativeDriver: false,
+			})
+		);
+		bobLoop.start();
+		dotsLoop.start();
+		return () => {
+			bobLoop.stop();
+			dotsLoop.stop();
+		};
+	}, [bob, dots]);
+
+	const dotCount = dots.interpolate({
+		inputRange: [0, 1, 2, 3],
+		outputRange: ['', '.', '..', '...'],
+	});
+
+	return (
+		<View style={styles.loadingRoot}>
+			<Animated.View style={{ transform: [{ translateY: bob }] }}>
+				<Image source={CREATURE} style={styles.loadingMascot} resizeMode="contain" />
+			</Animated.View>
+			<View style={styles.loadingTextRow}>
+				<Text style={styles.loadingText}>{label}</Text>
+				<Animated.Text style={styles.loadingText}>{dotCount}</Animated.Text>
+			</View>
+			{error ? <Text style={styles.errorText}>{error}</Text> : null}
+		</View>
+	);
+}
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -119,7 +180,7 @@ export default function App() {
 	if (!fontsLoaded) {
 		return (
 			<View style={styles.bootRoot}>
-				<ActivityIndicator color={colors.accent} />
+				<Image source={CREATURE} style={styles.bootMascot} resizeMode="contain" />
 			</View>
 		);
 	}
@@ -136,13 +197,7 @@ export default function App() {
 		);
 	} else if (screen === 'game') {
 		if (loadingTarget || !target) {
-			content = (
-				<View style={styles.loadingRoot}>
-					<ActivityIndicator color={colors.accent} size="large" />
-					<Text style={styles.loadingText}>SORTEANDO CRIATURA...</Text>
-					{error ? <Text style={styles.errorText}>{error}</Text> : null}
-				</View>
-			);
+			content = <LoadingScreen label="SORTEANDO CRIATURA" error={error} />;
 		} else {
 			content = (
 				<GameScreen
@@ -226,17 +281,30 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	bootMascot: {
+		width: 140,
+		height: 140,
+	},
 	loadingRoot: {
 		flex: 1,
 		backgroundColor: colors.bgDeep,
 		alignItems: 'center',
 		justifyContent: 'center',
-		gap: 16,
+		gap: 18,
+	},
+	loadingMascot: {
+		width: 150,
+		height: 150,
+	},
+	loadingTextRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		minHeight: 16,
 	},
 	loadingText: {
 		color: colors.accent,
 		fontFamily: fonts.pixel,
-		fontSize: 10,
+		fontSize: 11,
 		letterSpacing: 2,
 	},
 	errorText: {
