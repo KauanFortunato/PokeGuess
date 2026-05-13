@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#7971A0"
+      "backgroundColor": "#0c0a1a"
     },
     "ios": {
       "supportsTablet": true,
@@ -24,7 +24,7 @@
       "buildType": "apk",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#7971A0"
+        "backgroundColor": "#0c0a1a"
       }
     },
     "web": {
@@ -34,14 +34,18 @@
       "name": "PokeGuess",
       "shortName": "PokeGuess",
       "description": "Guess the Pokémon!",
-      "themeColor": "#7971A0",
-      "backgroundColor": "#7971A0"
+      "themeColor": "#0c0a1a",
+      "backgroundColor": "#0c0a1a"
     },
     "extra": {
       "eas": {
         "projectId": "3695c543-0af7-42a0-92f9-20720c748a86"
       }
     },
-    "owner": "pokemontrainers"
+    "owner": "pokemontrainers",
+    "plugins": [
+      "expo-font",
+      "expo-audio"
+    ]
   }
 }

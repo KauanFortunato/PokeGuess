@@ -1,17 +1,9 @@
-import { Alert } from 'react-native';
 import { fetchPokemonData } from './pokeApiService';
+import { randomIdFromGens, ALL_GENS } from '../game/gens';
 
-const MAX_POKEMON_ID = 898;
-
-const getRandomPokemon = async () => {
-	try {
-		const randomId = Math.floor(Math.random() * MAX_POKEMON_ID) + 1;
-		return await fetchPokemonData(randomId.toString());
-	} catch (error) {
-		console.error('Erro ao sortear Pokémon:', error);
-		Alert.alert('Erro', 'Falha ao buscar Pokémon. Verifique sua conexão.');
-		return null;
-	}
+const getRandomPokemon = async (gens = ALL_GENS) => {
+	const id = randomIdFromGens(gens);
+	return await fetchPokemonData(id.toString());
 };
 
 export default getRandomPokemon;
