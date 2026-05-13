@@ -13,6 +13,7 @@ import { colors, fonts } from '../../theme/tokens';
 import { getPokeSpriteUrl } from '../../api/pokeApiService';
 import { haptics } from '../../game/feedback';
 
+const CREATURE = require('../../../assets/img/creature.png');
 const FEATURED_IDS = [25, 6, 9, 3]; // Pikachu, Charizard, Blastoise, Venusaur
 
 function BobbingSilhouette({ id, delay }) {
@@ -47,6 +48,35 @@ function BobbingSilhouette({ id, delay }) {
 				style={[styles.silhouette, { tintColor: '#3a2f5e' }]}
 				resizeMode="contain"
 			/>
+		</Animated.View>
+	);
+}
+
+function BobbingMascot() {
+	const y = useRef(new Animated.Value(0)).current;
+
+	useEffect(() => {
+		const loop = Animated.loop(
+			Animated.sequence([
+				Animated.timing(y, {
+					toValue: -8,
+					duration: 800,
+					useNativeDriver: true,
+				}),
+				Animated.timing(y, {
+					toValue: 0,
+					duration: 800,
+					useNativeDriver: true,
+				}),
+			])
+		);
+		loop.start();
+		return () => loop.stop();
+	}, [y]);
+
+	return (
+		<Animated.View style={{ transform: [{ translateY: y }] }}>
+			<Image source={CREATURE} style={styles.mascot} resizeMode="contain" />
 		</Animated.View>
 	);
 }
@@ -168,11 +198,13 @@ export default function SplashScreen({ onStart, onOpenSettings, mode, gens }) {
 					{ opacity: fadeOut, transform: [{ scale: scaleOut }] },
 				]}
 			>
-				<View style={styles.creatures}>
+				<View style={styles.silhouettes}>
 					{FEATURED_IDS.map((id, i) => (
 						<BobbingSilhouette key={id} id={id} delay={i * 150} />
 					))}
 				</View>
+
+				<BobbingMascot />
 
 				<View style={styles.titleWrap}>
 					<View>
@@ -185,7 +217,11 @@ export default function SplashScreen({ onStart, onOpenSettings, mode, gens }) {
 					</View>
 				</View>
 
-				<Text style={styles.tagline}>— ADIVINHE A CRIATURA —</Text>
+				<View style={styles.retroBar}>
+					<View style={styles.retroDash} />
+					<Text style={styles.retroText}>RETRO EDITION</Text>
+					<View style={styles.retroDash} />
+				</View>
 
 				<Pressable
 					onPress={handleStart}
@@ -273,14 +309,36 @@ const styles = StyleSheet.create({
 		height: 3,
 		backgroundColor: colors.accent,
 	},
-	creatures: {
+	silhouettes: {
 		flexDirection: 'row',
-		gap: 18,
+		gap: 28,
 		marginBottom: 24,
 	},
 	silhouette: {
 		width: 56,
 		height: 56,
+	},
+	mascot: {
+		width: 110,
+		height: 110,
+		marginBottom: 14,
+	},
+	retroBar: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 10,
+		marginTop: 18,
+	},
+	retroDash: {
+		width: 28,
+		height: 2,
+		backgroundColor: colors.accentPink,
+	},
+	retroText: {
+		fontFamily: fonts.pixel,
+		fontSize: 11,
+		color: colors.accentPink,
+		letterSpacing: 3,
 	},
 	titleWrap: {
 		alignItems: 'center',

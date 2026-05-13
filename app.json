@@ -45,7 +45,16 @@
     "owner": "pokemontrainers",
     "plugins": [
       "expo-font",
-      "expo-audio"
+      "expo-audio",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "imageWidth": 280,
+          "resizeMode": "contain",
+          "backgroundColor": "#0c0a1a"
+        }
+      ]
     ]
   }
 }
