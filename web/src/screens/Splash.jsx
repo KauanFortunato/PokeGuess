@@ -65,13 +65,19 @@ export default function Splash({ onStart, onOpenSettings, mode, gens }) {
 			>
 				<div className="flex gap-7 mb-6">
 					{FEATURED_IDS.map((id, i) => (
-						<motion.img
+						<motion.div
 							key={id}
-							src={getPokeSpriteUrl(id)}
-							alt=""
-							className="w-14 h-14 object-contain"
+							className="w-14 h-14"
 							style={{
-								filter: 'brightness(0.3) saturate(0.6) hue-rotate(220deg)',
+								WebkitMaskImage: `url(${getPokeSpriteUrl(id)})`,
+								maskImage: `url(${getPokeSpriteUrl(id)})`,
+								WebkitMaskSize: 'contain',
+								maskSize: 'contain',
+								WebkitMaskRepeat: 'no-repeat',
+								maskRepeat: 'no-repeat',
+								WebkitMaskPosition: 'center',
+								maskPosition: 'center',
+								backgroundColor: '#3a2f5e',
 							}}
 							animate={{ y: [0, -6, 0] }}
 							transition={{

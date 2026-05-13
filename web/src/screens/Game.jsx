@@ -129,8 +129,9 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 			initial={{ opacity: 0, scale: 0.96 }}
 			animate={{ opacity: 1, scale: 1 }}
 			transition={{ duration: 0.4 }}
-			className="flex-1 flex flex-col px-2.5 pt-2 pb-2 safe-top safe-bottom bg-bg-deep"
+			className="flex-1 flex flex-col safe-top safe-bottom bg-bg-deep items-center"
 		>
+		<div className="w-full max-w-[640px] flex-1 flex flex-col px-2.5 pt-2 pb-2">
 			<div className="flex items-center justify-between px-1 pb-2.5 border-b-2 border-line-soft gap-2">
 				<button
 					type="button"
@@ -226,6 +227,7 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 					maxGuesses={maxGuesses}
 					singleGenMode={singleGenMode}
 				/>
+			</div>
 			</div>
 		</motion.div>
 	);

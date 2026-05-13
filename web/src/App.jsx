@@ -146,10 +146,8 @@ export default function App() {
 	}
 
 	return (
-		<div className="min-h-full flex justify-center bg-bg-root">
-			<div className="w-full max-w-[440px] min-h-screen flex flex-col bg-bg-deep">
-				{content}
-			</div>
+		<div className="min-h-screen w-full flex flex-col bg-bg-deep">
+			{content}
 			<Settings
 				open={settingsOpen}
 				initialMode={modeKey}
