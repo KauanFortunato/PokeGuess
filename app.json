@@ -27,6 +27,16 @@
         "backgroundColor": "#7971A0"
       }
     },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single",
+      "name": "PokeGuess",
+      "shortName": "PokeGuess",
+      "description": "Guess the Pokémon!",
+      "themeColor": "#7971A0",
+      "backgroundColor": "#7971A0"
+    },
     "extra": {
       "eas": {
         "projectId": "3695c543-0af7-42a0-92f9-20720c748a86"

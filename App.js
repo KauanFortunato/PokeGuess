@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
-import { FilterPoke } from './src/firebase/api/filter-poke';
+import { FilterPoke } from './src/api/filterPoke';
 import FilterPokes from './src/components/filter-pokes/index';
 import Header from './src/components/header';
 import Search from './src/components/search';
