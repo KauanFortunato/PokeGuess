@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/demo.gif" alt="PokeGuess demo" width="520" />
+  <img src="./assets/demo.gif" alt="PokeGuess demo" width="640" />
 </p>
 
 <p align="center">
