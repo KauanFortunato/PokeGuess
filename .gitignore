@@ -35,3 +35,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Claude Code local config
+.claude/
+
+# Build output (Expo export)
+/tmp/

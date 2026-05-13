@@ -1,65 +1,51 @@
-export const comparePokemons = (inputPokemon, randomPokemon) => {
-	const result = {};
+// Returns 6 cells matching the active column layout.
+// When singleGenMode is true, the "GER" column is replaced with "EVO" (evolution stage).
+export const comparePokemons = (guess, target, options = {}) => {
+	const { singleGenMode = false } = options;
+	const gTypes = guess.tipos || [guess.tipo1, guess.tipo2].filter(Boolean);
+	const tTypes = target.tipos || [target.tipo1, target.tipo2].filter(Boolean);
 
-	result.nome =
-		(inputPokemon.nome?.toLowerCase() || '') === (randomPokemon.nome?.toLowerCase() || '')
-			? 'true'
-			: 'false';
+	const sameSet =
+		gTypes.length === tTypes.length && gTypes.every((t) => tTypes.includes(t));
+	const overlap = gTypes.some((t) => tTypes.includes(t));
+	const typeKind = sameSet ? 'match' : overlap ? 'partial' : 'miss';
 
-	if ((inputPokemon.tipo1?.toLowerCase() || '') === (randomPokemon.tipo1?.toLowerCase() || '')) {
-		result.tipo1 = 'true';
-	} else if (
-		(inputPokemon.tipo1?.toLowerCase() || '') === (randomPokemon.tipo2?.toLowerCase() || '')
-	) {
-		result.tipo1 = 'parcial';
+	let middleCell;
+	if (singleGenMode) {
+		const gEvo = guess.evolucao || 1;
+		const tEvo = target.evolucao || 1;
+		const diff = tEvo - gEvo;
+		const abs = Math.abs(diff);
+		const kind = abs === 0 ? 'match' : abs === 1 ? 'partial' : 'miss';
+		const arrow = diff === 0 ? '' : diff > 0 ? '↑' : '↓';
+		middleCell = { col: 'evolucao', kind, value: `E${gEvo}`, arrow };
 	} else {
-		result.tipo1 = 'false';
+		const diff = target.geracao - guess.geracao;
+		const abs = Math.abs(diff);
+		const kind = diff === 0 ? 'match' : abs === 1 ? 'partial' : 'miss';
+		const arrow = diff === 0 ? '' : diff > 0 ? '↑' : '↓';
+		middleCell = { col: 'geracao', kind, value: `G${guess.geracao}`, arrow };
 	}
 
-	if ((inputPokemon.tipo2?.toLowerCase() || '') === (randomPokemon.tipo2?.toLowerCase() || '')) {
-		result.tipo2 = 'true';
-	} else if (
-		(inputPokemon.tipo2?.toLowerCase() || '') === (randomPokemon.tipo1?.toLowerCase() || '')
-	) {
-		result.tipo2 = 'parcial';
-	} else {
-		result.tipo2 = 'false';
-	}
+	const colorKind = guess.cor === target.cor ? 'match' : 'miss';
+	const habKind = guess.habitat === target.habitat ? 'match' : 'miss';
 
-	result.cor =
-		(inputPokemon.cor?.toLowerCase() || '') === (randomPokemon.cor?.toLowerCase() || '')
-			? 'true'
-			: 'false';
+	const hDiff = target.alturaM - guess.alturaM;
+	const hAbs = Math.abs(hDiff);
+	const hKind = hAbs < 0.05 ? 'match' : hAbs <= 0.3 ? 'partial' : 'miss';
+	const hArrow = hAbs < 0.05 ? '' : hDiff > 0 ? '↑' : '↓';
 
-	result.habitat =
-		(inputPokemon.habitat?.toLowerCase() || '') === (randomPokemon.habitat?.toLowerCase() || '')
-			? 'true'
-			: 'false';
+	const wDiff = target.pesoKg - guess.pesoKg;
+	const wAbs = Math.abs(wDiff);
+	const wKind = wAbs < 0.5 ? 'match' : wAbs <= 8 ? 'partial' : 'miss';
+	const wArrow = wAbs < 0.5 ? '' : wDiff > 0 ? '↑' : '↓';
 
-	result.altura =
-		(inputPokemon.altura?.toString() || '') === (randomPokemon.altura?.toString() || '')
-			? 'true'
-			: 'false';
-
-	result.peso =
-		(inputPokemon.peso?.toString() || '') === (randomPokemon.peso?.toString() || '')
-			? 'true'
-			: 'false';
-
-	result.numero_evolucao =
-		(inputPokemon.numero_evolucao?.toString() || '') ===
-		(randomPokemon.numero_evolucao?.toString() || '')
-			? 'true'
-			: 'false';
-
-	return {
-		nome: result.nome,
-		tipo1: result.tipo1,
-		tipo2: result.tipo2,
-		cor: result.cor,
-		habitat: result.habitat,
-		altura: result.altura,
-		peso: result.peso,
-		numero_evolucao: result.numero_evolucao,
-	};
+	return [
+		{ col: 'tipos', kind: typeKind, value: gTypes.join('/') },
+		middleCell,
+		{ col: 'cor', kind: colorKind, value: guess.cor },
+		{ col: 'habitat', kind: habKind, value: guess.habitat },
+		{ col: 'altura', kind: hKind, value: `${guess.alturaM.toFixed(1)}m`, arrow: hArrow },
+		{ col: 'peso', kind: wKind, value: `${guess.pesoKg.toFixed(1)}kg`, arrow: wArrow },
+	];
 };
