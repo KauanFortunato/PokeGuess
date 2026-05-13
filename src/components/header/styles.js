@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
 	container_utility: {
 		flexDirection: 'row',
 		alignItems: 'center',
+		flex: 1,
 	},
 	button_help: {
 		position: 'absolute',
@@ -25,10 +26,12 @@ const styles = StyleSheet.create({
 	container_logo: {
 		flex: 1,
 		alignItems: 'center',
+		justifyContent: 'center',
+		height: height * 0.1,
 	},
 	logo: {
-		width: '50%',
-		height: '70%',
+		width: width * 0.4,
+		height: height * 0.07,
 		resizeMode: 'contain',
 	},
 	// Estilos do Modal
