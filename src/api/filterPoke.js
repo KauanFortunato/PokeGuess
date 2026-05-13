@@ -41,7 +41,6 @@ export const FilterPoke = async (term, setFilteredPokemons, gens = ALL_GENS) => 
 
 		setFilteredPokemons(lightItems);
 
-		// Prefetch the top suggestions so tap-to-submit is instant
 		for (const it of lightItems.slice(0, 5)) {
 			prefetchPokemonData(it._apiId);
 		}
@@ -50,3 +49,4 @@ export const FilterPoke = async (term, setFilteredPokemons, gens = ALL_GENS) => 
 		setFilteredPokemons([]);
 	}
 };
+
