@@ -5,7 +5,7 @@
 <h1 align="center">PokeGuess — Retro Edition</h1>
 
 <p align="center">
-  <em>Adivinhe o Pokémon. Estilo Wordle, 898 criaturas, em pixel art retrô. Instalável como PWA.</em>
+  <em>Guess the Pokémon. Wordle-style, 898 creatures, retro pixel art. Installable as a PWA.</em>
 </p>
 
 <p align="center">
@@ -21,47 +21,47 @@
 </p>
 
 <p align="center">
-  <a href="./assets/demo.mp4"><em>▶ Versão MP4 (HD)</em></a>
+  <a href="./assets/demo.mp4"><em>▶ MP4 version (HD)</em></a>
 </p>
 
 ---
 
 ## ✨ Features
 
-- 🎮 **3 modos de jogo**
-  - **Normal** — tentativas infinitas até acertar
-  - **Difícil** — 15 chutes
-  - **Nightmare** — 6 chutes, sem dicas
-- 🔢 **Filtro por geração** — escolha 1 a 8 gerações individualmente ou todas as 898 criaturas
-- 🧠 **6 colunas de comparação** por chute — Tipo, Geração (ou Evolução), Cor, Habitat, Altura, Peso, com indicadores ↑↓ pras diferenças numéricas
-- 💡 **Sistema de dicas** — após 10 chutes (Normal/Difícil), revele atributos do alvo um a um
-- 🪄 **Coluna dinâmica GER ↔ EVO** — quando só 1 geração é selecionada, a coluna troca pra Estágio de Evolução automaticamente
+- 🎮 **3 game modes**
+  - **Normal** — unlimited guesses until you nail it
+  - **Hard** — 15 guesses
+  - **Nightmare** — 6 guesses, no hints
+- 🔢 **Generation filter** — pick any of the 8 generations individually, or play across all 898 creatures
+- 🧠 **6 comparison columns** per guess — Type, Generation (or Evolution), Color, Habitat, Height, Weight, with ↑↓ indicators for numeric differences
+- 💡 **Hint system** — after 10 guesses (Normal/Hard), reveal target attributes one by one
+- 🪄 **Dynamic GEN ↔ EVO column** — when only 1 generation is selected, the column switches automatically to Evolution Stage
 - 📳 **Haptics** via `navigator.vibrate` (Android Chrome)
-- 🔊 **Cries oficiais** dos Pokémon na vitória e derrota (via PokeAPI)
-- 🎨 **Estética retrô** — Press Start 2P, sprites GB/GBA, paleta GB Color
-- ⚡ **Prefetch inteligente** — as sugestões são pré-carregadas pra tap-to-submit ser instantâneo
-- 📱 **PWA instalável** — service worker offline + manifest, funciona como app nativo
-- 🌐 **108 KB gzipped** — bundle enxuto, carrega instantâneo
+- 🔊 **Official Pokémon cries** on win and loss (via PokeAPI)
+- 🎨 **Retro aesthetic** — Press Start 2P, GB/GBA sprites, GB Color palette
+- ⚡ **Smart prefetch** — suggestions are pre-loaded so tap-to-submit feels instant
+- 📱 **Installable PWA** — offline service worker + manifest, works like a native app
+- 🌐 **108 KB gzipped** — lean bundle, loads instantly
 
 ---
 
-## 🕹️ Como jogar
+## 🕹️ How to play
 
-1. **Tela inicial** — aperte ▶ PRESS START. O botão ⌗ no canto abre o menu de ajustes (modos, gerações, som, desistir).
-2. **Digite o nome** da criatura no campo de busca. As sugestões aparecem com o sprite — toque na que quiser chutar.
-3. **Cada chute revela 6 células** com cores:
-   - 🟩 **Verde** — atributo bate exato
-   - 🟨 **Amarelo** — atributo está perto (tipo sobreposto, ±1 geração, ±0.3m altura, ±8kg peso)
-   - 🟥 **Vermelho** — errou
-   - Setas **↑ / ↓** indicam se o alvo é maior ou menor (altura, peso, geração)
-4. **Acerte antes** do limite de tentativas (depende do modo).
-5. **No fim**: animação de vitória com cry da criatura + confete, ou tela de derrota com a criatura revelada.
+1. **Splash screen** — hit ▶ PRESS START. The ⌗ button in the corner opens the settings menu (modes, generations, sound, give up).
+2. **Type the creature's name** into the search box. Suggestions appear with sprites — tap one to submit it as your guess.
+3. **Each guess reveals 6 cells** with colors:
+   - 🟩 **Green** — exact match
+   - 🟨 **Yellow** — close (overlapping type, ±1 generation, ±0.3m height, ±8kg weight)
+   - 🟥 **Red** — miss
+   - **↑ / ↓** arrows indicate whether the target is larger or smaller (height, weight, generation)
+4. **Get it right** before you run out of attempts (depends on the mode).
+5. **At the end**: a win animation with the creature's cry + confetti, or a loss screen revealing the target.
 
 ---
 
-## 🚀 Rodar localmente
+## 🚀 Run locally
 
-Precisa de [Node.js 18+](https://nodejs.org/).
+Requires [Node.js 18+](https://nodejs.org/).
 
 ```bash
 git clone https://github.com/KauanFortunato/PokeGuess.git
@@ -70,67 +70,67 @@ npm install
 npm run dev
 ```
 
-Abre [http://localhost:5173](http://localhost:5173). O Vite mostra também o IP de rede pra testar no celular (mesma Wi-Fi).
+Open [http://localhost:5173](http://localhost:5173). Vite also prints the network IP so you can test on your phone (same Wi-Fi).
 
-### Build de produção
+### Production build
 
 ```bash
-npm run build      # gera dist/
-npm run preview    # serve o dist/ localmente pra testar
+npm run build      # outputs dist/
+npm run preview    # serves dist/ locally to test
 ```
 
-### Instalar como PWA
+### Install as a PWA
 
-No Chrome (desktop ou Android): barra de endereço → ícone de "instalar".
-No iPhone Safari: Compartilhar → "Adicionar à Tela de Início".
+On Chrome (desktop or Android): address bar → "install" icon.
+On iPhone Safari: Share → "Add to Home Screen".
 
 ---
 
 ## 🛠️ Stack
 
-| Camada | Tech |
+| Layer | Tech |
 | --- | --- |
 | Build | [Vite 6](https://vitejs.dev/) |
 | UI | [React 19.1](https://react.dev/) + [Tailwind CSS 3.4](https://tailwindcss.com/) |
-| Animações | [framer-motion](https://www.framer.com/motion/) + CSS keyframes |
+| Animations | [framer-motion](https://www.framer.com/motion/) + CSS keyframes |
 | PWA | [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) (Workbox) |
-| API | [PokeAPI](https://pokeapi.co/) (sprites, dados de espécies, cadeias de evolução, cries) |
-| Áudio | HTML5 `Audio` API |
+| API | [PokeAPI](https://pokeapi.co/) (sprites, species data, evolution chains, cries) |
+| Audio | HTML5 `Audio` API |
 | Haptics | Web `navigator.vibrate` |
-| Fontes | [@fontsource/press-start-2p](https://fontsource.org/) + [VT323](https://fontsource.org/) (self-hosted, sem CDN) |
+| Fonts | [@fontsource/press-start-2p](https://fontsource.org/) + [VT323](https://fontsource.org/) (self-hosted, no CDN) |
 | Helpers | [clsx](https://github.com/lukeed/clsx) |
 
 ---
 
-## 📂 Estrutura
+## 📂 Structure
 
 ```
 .
 ├── index.html
 ├── package.json
 ├── vite.config.js          # vite + plugin-pwa + plugin-react
-├── tailwind.config.js      # tokens do tema (cores, fontes, keyframes)
+├── tailwind.config.js      # theme tokens (colors, fonts, keyframes)
 ├── postcss.config.js
 ├── public/
 │   ├── icons/              # PWA icons (192, 512, 512-maskable)
-│   └── img/                # creature.png (mascote da splash)
+│   └── img/                # creature.png (splash mascot)
 ├── src/
 │   ├── api/
-│   │   ├── pokeApiService.js   # cliente PokeAPI: cache, prefetch, fetches paralelos
-│   │   ├── randomPoke.js       # sorteia Pokémon respeitando o filtro de geração
-│   │   ├── filterPoke.js       # filtra sugestões por nome + geração + prefetch
-│   │   └── comparePoke.js      # lógica de comparação dos 6 atributos
+│   │   ├── pokeApiService.js   # PokeAPI client: cache, prefetch, parallel fetches
+│   │   ├── randomPoke.js       # picks a Pokémon honoring the generation filter
+│   │   ├── filterPoke.js       # filters suggestions by name + generation + prefetch
+│   │   └── comparePoke.js      # comparison logic for the 6 attributes
 │   ├── game/
-│   │   ├── modes.js            # Normal / Difícil / Nightmare
-│   │   ├── gens.js             # ranges de gerações 1-8 e helpers
-│   │   ├── feedback.js         # navigator.vibrate + mute global
+│   │   ├── modes.js            # Normal / Hard / Nightmare
+│   │   ├── gens.js             # ranges for generations 1-8 and helpers
+│   │   ├── feedback.js         # navigator.vibrate + global mute
 │   │   └── sound.js            # cries via HTML5 Audio
 │   ├── screens/
-│   │   ├── Splash.jsx          # tela inicial: silhuetas + mascote + POKE/GUESS
-│   │   ├── Game.jsx            # board 6×6, FlipCell, input com sugestões
-│   │   ├── Win.jsx             # orb spin + creature reveal + confete + cry
-│   │   ├── Lose.jsx            # shake + revelação da criatura
-│   │   └── Settings.jsx        # modal de ajustes
+│   │   ├── Splash.jsx          # splash screen: silhouettes + mascot + POKE/GUESS
+│   │   ├── Game.jsx            # 6×6 board, FlipCell, input with suggestions
+│   │   ├── Win.jsx             # orb spin + creature reveal + confetti + cry
+│   │   ├── Lose.jsx            # shake + creature reveal
+│   │   └── Settings.jsx        # settings modal
 │   ├── components/
 │   │   ├── Board.jsx
 │   │   ├── FlipCell.jsx        # 3D rotateX flip via CSS
@@ -144,13 +144,13 @@ No iPhone Safari: Compartilhar → "Adicionar à Tela de Início".
 
 ---
 
-## 🤝 Créditos
+## 🤝 Credits
 
-- **Sprites & dados dos Pokémon** — [PokeAPI](https://pokeapi.co/) (sprites GB/GBA + official artwork + species + cries)
-- **Fontes** — [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) por CodeMan38 e [VT323](https://fonts.google.com/specimen/VT323) por Peter Hull
+- **Pokémon sprites & data** — [PokeAPI](https://pokeapi.co/) (GB/GBA sprites + official artwork + species + cries)
+- **Fonts** — [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) by CodeMan38 and [VT323](https://fonts.google.com/specimen/VT323) by Peter Hull
 
 ---
 
-## 📝 Licença
+## 📝 License
 
-[MIT](./LICENSE.txt). Pokémon e seus nomes são marcas registradas da Nintendo / Game Freak — este é um projeto educacional sem fins lucrativos.
+[MIT](./LICENSE.txt). Pokémon and its names are registered trademarks of Nintendo / Game Freak — this is a non-profit educational project.
