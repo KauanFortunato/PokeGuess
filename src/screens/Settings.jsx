@@ -1,7 +1,28 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import {
+	Check,
+	Flag,
+	Gamepad2,
+	Home,
+	Layers,
+	RotateCcw,
+	Shield,
+	Skull,
+	SlidersHorizontal,
+	Target,
+	Volume2,
+	VolumeX,
+	X,
+} from 'lucide-react';
 import { MODES, MODE_ORDER } from '../game/modes';
 import { ALL_GENS } from '../game/gens';
+
+const MODE_ICONS = {
+	normal: Shield,
+	hard: Target,
+	nightmare: Skull,
+};
 
 function arraysEqual(a, b) {
 	if (a.length !== b.length) return false;
@@ -52,152 +73,153 @@ export default function Settings({
 		muted !== initialMuted;
 
 	const apply = () => onApply({ mode, gens, muted });
+	const SoundIcon = muted ? VolumeX : Volume2;
 
 	return (
-		<div
-			className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[rgba(5,4,16,0.85)]"
-			onClick={onClose}
-		>
-			<div
-				className="w-full max-w-sm max-h-[92vh] bg-bg-deep border-[3px] border-accent rounded flex flex-col"
-				onClick={(e) => e.stopPropagation()}
-			>
-				<div className="flex items-center justify-between px-4 py-3 border-b-2 border-line-soft">
-					<h2 className="font-pixel text-sm text-accent tracking-[2px]">AJUSTES</h2>
+		<div className="settings-overlay" onClick={onClose}>
+			<div className="settings-panel" onClick={(e) => e.stopPropagation()}>
+				<div className="settings-header">
+					<div className="flex min-w-0 items-center gap-2.5">
+						<span className="settings-header__icon">
+							<SlidersHorizontal size={18} strokeWidth={2.6} />
+						</span>
+						<div className="min-w-0">
+							<h2 className="font-pixel text-sm text-accent tracking-[2px]">AJUSTES</h2>
+							<p className="font-mono text-base leading-none text-txt-dim">
+								modo, gerações e som
+							</p>
+						</div>
+					</div>
 					<button
 						type="button"
 						onClick={onClose}
-						className="font-pixel text-base text-txt px-1"
+						className="pixel-icon-button pixel-icon-button--small"
+						aria-label="Fechar ajustes"
 					>
-						✕
+						<X size={17} strokeWidth={2.8} />
 					</button>
 				</div>
 
-				<div className="flex-1 overflow-y-auto px-4 py-3.5">
-					<p className="font-pixel text-[9px] text-accent-pink tracking-[2px] mb-2.5">
-						MODO
-					</p>
-					<div className="flex gap-1.5">
-						{MODE_ORDER.map((k) => {
-							const m = MODES[k];
-							const selected = mode === k;
-							return (
-								<button
-									key={k}
-									type="button"
-									onClick={() => setMode(k)}
-									className={clsx(
-										'flex-1 py-3 px-1 border-2 border-b-4 rounded-sm flex flex-col items-center active:translate-y-0.5 active:border-b-2',
-										selected
-											? 'bg-accent text-bg-deep border-bg-deep'
-											: 'bg-bg-card text-txt border-line-soft'
-									)}
-								>
-									<span className="font-pixel text-[8px] tracking-[1px]">{m.label}</span>
-									<span
-										className={clsx(
-											'font-mono text-lg mt-1',
-											selected ? 'text-bg-deep' : 'text-txt-dim'
-										)}
+				<div className="settings-body">
+					<section className="settings-section">
+						<div className="settings-section__title">
+							<Gamepad2 size={15} strokeWidth={2.6} />
+							<span>MODO</span>
+						</div>
+						<div className="settings-mode-grid">
+							{MODE_ORDER.map((k) => {
+								const m = MODES[k];
+								const selected = mode === k;
+								const ModeIcon = MODE_ICONS[k] || Gamepad2;
+								return (
+									<button
+										key={k}
+										type="button"
+										onClick={() => setMode(k)}
+										aria-pressed={selected}
+										className={clsx('settings-choice', selected && 'settings-choice--selected')}
 									>
-										{m.sub}
-									</span>
-								</button>
-							);
-						})}
-					</div>
+										<span className="settings-choice__icon">
+											<ModeIcon size={17} strokeWidth={2.7} />
+										</span>
+										<span className="settings-choice__label">{m.label}</span>
+										<span className="settings-choice__sub">{m.description}</span>
+									</button>
+								);
+							})}
+						</div>
+					</section>
 
-					<p className="font-pixel text-[9px] text-accent-pink tracking-[2px] mt-5 mb-2.5">
-						GERAÇÕES
-					</p>
-					<div className="flex flex-wrap gap-1.5">
-						{ALL_GENS.map((g) => {
-							const selected = gens.includes(g);
-							return (
-								<button
-									key={g}
-									type="button"
-									onClick={() => toggleGen(g)}
-									className={clsx(
-										'w-[22%] aspect-[1.4] border-2 border-b-4 rounded-sm flex items-center justify-center active:translate-y-0.5 active:border-b-2',
-										selected
-											? 'bg-accent-mint text-bg-deep border-bg-deep'
-											: 'bg-bg-card text-txt border-line-soft'
-									)}
-								>
-									<span className="font-pixel text-sm">{g}</span>
-								</button>
-							);
-						})}
-					</div>
-					<button
-						type="button"
-						onClick={() => setGens(allSelected ? [1] : [...ALL_GENS])}
-						className={clsx(
-							'w-full mt-2 py-2.5 border-2 border-b-4 rounded-sm font-pixel text-[10px] tracking-[2px] active:translate-y-0.5 active:border-b-2',
-							allSelected
-								? 'bg-accent-mint text-bg-deep border-bg-deep'
-								: 'bg-bg-card text-txt border-line-soft'
-						)}
-					>
-						{allSelected ? '✓ TODAS' : 'TODAS'}
-					</button>
+					<section className="settings-section">
+						<div className="settings-section__title">
+							<Layers size={15} strokeWidth={2.6} />
+							<span>GERAÇÕES</span>
+						</div>
+						<div className="settings-gen-grid">
+							{ALL_GENS.map((g) => {
+								const selected = gens.includes(g);
+								return (
+									<button
+										key={g}
+										type="button"
+										onClick={() => toggleGen(g)}
+										aria-pressed={selected}
+										className={clsx('settings-gen', selected && 'settings-gen--selected')}
+									>
+										{selected && <Check size={12} strokeWidth={3} />}
+										<span>{g}</span>
+									</button>
+								);
+							})}
+						</div>
+						<button
+							type="button"
+							onClick={() => setGens(allSelected ? [1] : [...ALL_GENS])}
+							className={clsx('settings-toggle', allSelected && 'settings-toggle--active')}
+						>
+							<Layers size={15} strokeWidth={2.7} />
+							<span>{allSelected ? 'TODAS ATIVAS' : 'ATIVAR TODAS'}</span>
+						</button>
+					</section>
 
-					<p className="font-pixel text-[9px] text-accent-pink tracking-[2px] mt-5 mb-2.5">
-						SOM / VIBRAÇÃO
-					</p>
-					<button
-						type="button"
-						onClick={() => setMuted((v) => !v)}
-						className={clsx(
-							'w-full py-2.5 border-2 border-b-4 rounded-sm font-pixel text-[10px] tracking-[2px] active:translate-y-0.5 active:border-b-2',
-							!muted
-								? 'bg-accent-mint text-bg-deep border-bg-deep'
-								: 'bg-bg-card text-txt border-line-soft'
-						)}
-					>
-						{muted ? '✕ DESLIGADO' : '✓ LIGADO'}
-					</button>
+					<section className="settings-section">
+						<div className="settings-section__title">
+							<SoundIcon size={15} strokeWidth={2.6} />
+							<span>SOM / VIBRAÇÃO</span>
+						</div>
+						<button
+							type="button"
+							onClick={() => setMuted((v) => !v)}
+							aria-pressed={!muted}
+							className={clsx('settings-toggle', !muted && 'settings-toggle--active')}
+						>
+							<SoundIcon size={17} strokeWidth={2.7} />
+							<span>{muted ? 'DESLIGADO' : 'LIGADO'}</span>
+						</button>
+					</section>
 
 					{inGame && (
-						<>
-							<p className="font-pixel text-[9px] text-miss tracking-[2px] mt-5 mb-2.5">
-								EM JOGO
-							</p>
-							<button
-								type="button"
-								onClick={onGiveUp}
-								className="w-full py-3 mb-2 bg-miss text-white font-pixel text-[10px] tracking-[1px] border-2 border-b-4 border-bg-deep rounded-sm active:translate-y-0.5 active:border-b-2"
-							>
-								DESISTIR
-							</button>
-							<button
-								type="button"
-								onClick={onBackToMenu}
-								className="w-full py-3 bg-bg-card text-txt border-2 border-b-4 border-line font-pixel text-[10px] tracking-[1px] rounded-sm active:translate-y-0.5 active:border-b-2"
-							>
-								VOLTAR AO MENU
-							</button>
-						</>
+						<section className="settings-section settings-section--danger">
+							<div className="settings-section__title">
+								<Flag size={15} strokeWidth={2.6} />
+								<span>EM JOGO</span>
+							</div>
+							<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+								<button
+									type="button"
+									onClick={onGiveUp}
+									className="settings-command settings-command--danger"
+								>
+									<Flag size={16} strokeWidth={2.7} />
+									<span>DESISTIR</span>
+								</button>
+								<button
+									type="button"
+									onClick={onBackToMenu}
+									className="settings-command"
+								>
+									<Home size={16} strokeWidth={2.7} />
+									<span>MENU</span>
+								</button>
+							</div>
+						</section>
 					)}
 				</div>
 
-				<div className="px-4 py-3 border-t-2 border-line-soft flex flex-col gap-2">
+				<div className="settings-footer">
 					{dirty && (
-						<button
-							type="button"
-							onClick={apply}
-							className="w-full py-3 bg-accent text-bg-deep font-pixel text-[10px] tracking-[1px] border-2 border-b-4 border-bg-deep rounded-sm active:translate-y-0.5 active:border-b-2"
-						>
-							{inGame ? 'APLICAR E REINICIAR' : 'APLICAR'}
+						<button type="button" onClick={apply} className="pixel-action-button">
+							<RotateCcw size={16} strokeWidth={2.8} />
+							<span>{inGame ? 'APLICAR E REINICIAR' : 'APLICAR'}</span>
 						</button>
 					)}
 					<button
 						type="button"
 						onClick={onClose}
-						className="w-full py-3 bg-bg-card text-txt border-2 border-b-4 border-line font-pixel text-[10px] tracking-[1px] rounded-sm active:translate-y-0.5 active:border-b-2"
+						className="pixel-action-button pixel-action-button--secondary"
 					>
-						{dirty ? 'CANCELAR' : 'FECHAR'}
+						<X size={16} strokeWidth={2.8} />
+						<span>{dirty ? 'CANCELAR' : 'FECHAR'}</span>
 					</button>
 				</div>
 			</div>

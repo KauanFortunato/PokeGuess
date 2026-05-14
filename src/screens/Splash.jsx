@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CalendarDays, Play, Settings2 } from 'lucide-react';
 import { haptics } from '../game/feedback';
 import { getPokeSpriteUrl } from '../api/pokeApiService';
 
@@ -11,17 +12,17 @@ const STARS = Array.from({ length: 22 }, (_, i) => ({
 	delay: `${(i % 5) * 0.3}s`,
 }));
 
-export default function Splash({ onStart, onOpenSettings, mode, gens }) {
+export default function Splash({ onStart, onDailyStart, onOpenSettings, mode, gens }) {
 	const [exiting, setExiting] = useState(false);
 	const [showFlash, setShowFlash] = useState(false);
 
-	const handleStart = () => {
+	const handleStart = (startFn) => {
 		if (exiting) return;
 		haptics.medium();
 		setShowFlash(true);
 		setTimeout(() => setShowFlash(false), 280);
 		setExiting(true);
-		setTimeout(() => onStart(), 480);
+		setTimeout(() => startFn(), 480);
 	};
 
 	const gensLabel =
@@ -41,9 +42,10 @@ export default function Splash({ onStart, onOpenSettings, mode, gens }) {
 						haptics.tap();
 						onOpenSettings();
 					}}
-					className="w-9 h-9 bg-bg-card border-2 border-b-[3px] border-line-soft rounded-sm flex items-center justify-center font-pixel text-base text-txt active:translate-y-px active:border-b-2"
+					className="pixel-icon-button"
+					aria-label="Abrir ajustes"
 				>
-					⌗
+					<Settings2 size={18} strokeWidth={2.6} />
 				</button>
 			</div>
 
@@ -61,7 +63,7 @@ export default function Splash({ onStart, onOpenSettings, mode, gens }) {
 				initial={{ opacity: 1, scale: 1 }}
 				animate={exiting ? { opacity: 0, scale: 1.1 } : { opacity: 1, scale: 1 }}
 				transition={{ duration: 0.4 }}
-				className="relative flex flex-col items-center"
+				className="relative flex w-full flex-col items-center"
 			>
 				<div className="flex gap-7 mb-6">
 					{FEATURED_IDS.map((id, i) => (
@@ -98,14 +100,18 @@ export default function Splash({ onStart, onOpenSettings, mode, gens }) {
 					transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
 				/>
 
-				<div className="text-center relative">
-					<h1 className="font-pixel text-4xl text-accent leading-none tracking-[2px] relative inline-block">
-						<span className="absolute top-1 left-1 text-black">POKE</span>
-						<span className="relative">POKE</span>
+				<div className="text-center relative w-full">
+					<h1 className="font-pixel text-4xl text-accent leading-none tracking-[2px] relative block">
+						<span className="relative inline-block">
+							<span className="absolute top-1 left-1 text-black">POKE</span>
+							<span className="relative">POKE</span>
+						</span>
 					</h1>
-					<h1 className="font-pixel text-4xl text-accent leading-none tracking-[2px] mt-1.5 relative inline-block">
-						<span className="absolute top-1 left-1 text-black">GUESS</span>
-						<span className="relative">GUESS</span>
+					<h1 className="font-pixel text-4xl text-accent leading-none tracking-[2px] mt-1.5 relative block">
+						<span className="relative inline-block">
+							<span className="absolute top-1 left-1 text-black">GUESS</span>
+							<span className="relative">GUESS</span>
+						</span>
 					</h1>
 				</div>
 
@@ -117,14 +123,26 @@ export default function Splash({ onStart, onOpenSettings, mode, gens }) {
 					<span className="w-7 h-0.5 bg-accent-pink" />
 				</div>
 
-				<button
-					type="button"
-					onClick={handleStart}
-					disabled={exiting}
-					className="mt-7 px-4.5 py-2.5 font-pixel text-sm text-txt tracking-[2px] animate-blink active:scale-95 disabled:opacity-50"
-				>
-					▶ PRESS START
-				</button>
+				<div className="splash-actions">
+					<button
+						type="button"
+						onClick={() => handleStart(onStart)}
+						disabled={exiting}
+						className="splash-start-button"
+					>
+						<Play size={16} fill="currentColor" strokeWidth={2.6} />
+						JOGAR
+					</button>
+					<button
+						type="button"
+						onClick={() => handleStart(onDailyStart)}
+						disabled={exiting}
+						className="splash-daily-button"
+					>
+						<CalendarDays size={16} strokeWidth={2.7} />
+						<span>POKÉMON DO DIA</span>
+					</button>
+				</div>
 
 				{mode && (
 					<p className="mt-4 font-pixel text-[8px] text-accent tracking-[2px] text-center">

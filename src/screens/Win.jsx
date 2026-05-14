@@ -1,32 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RotateCcw, Sparkles, Trophy } from 'lucide-react';
 import { haptics } from '../game/feedback';
 import { playCry } from '../game/sound';
 
 const CONFETTI_COLORS = ['#ffd23f', '#ff6b9d', '#7fffd4', '#94e344', '#41a6f6', '#ef7d57'];
 
-function Orb() {
+function CaptureDisc() {
 	return (
 		<motion.div
-			initial={{ rotate: 0, scale: 0.6, opacity: 0 }}
+			initial={{ rotate: 0, scale: 0.72, opacity: 0 }}
 			animate={{ rotate: 540, scale: 1, opacity: 1 }}
-			exit={{ scale: 3, opacity: 0 }}
+			exit={{ scale: 2.4, opacity: 0 }}
 			transition={{ duration: 0.8, ease: 'linear' }}
-			className="relative w-[120px] h-[120px]"
-			style={{ filter: 'drop-shadow(0 0 24px rgba(255,210,63,0.5))' }}
+			className="end-screen__capture-disc"
 		>
-			<div
-				className="absolute inset-0 rounded-full border-4 border-bg-deep"
-				style={{
-					background:
-						'radial-gradient(circle at 35% 35%, #ffd23f 0%, #e89c1d 50%, #a85f0a 100%)',
-					boxShadow: 'inset 0 0 30px rgba(255,255,255,0.4), inset 0 -10px 0 rgba(0,0,0,0.2)',
-				}}
-			/>
-			<div className="absolute left-0 right-0 top-[54px] h-3 bg-bg-deep" />
-			<div className="absolute top-[42px] left-[42px] w-9 h-9 rounded-full bg-bg-deep flex items-center justify-center">
-				<div className="w-4 h-4 rounded-full bg-white" />
-			</div>
+			<div className="end-screen__capture-disc-top" />
+			<div className="end-screen__capture-disc-line" />
+			<div className="end-screen__capture-disc-core" />
 		</motion.div>
 	);
 }
@@ -45,6 +36,7 @@ function Confetti() {
 			})),
 		[]
 	);
+
 	return (
 		<div className="absolute inset-0 pointer-events-none z-10">
 			{pieces.map((p) => (
@@ -66,7 +58,30 @@ function Confetti() {
 	);
 }
 
-export default function Win({ target, guesses, mode, onAgain }) {
+function ResultStat({ label, value }) {
+	return (
+		<div className="result-stat">
+			<span className="result-stat__label">{label}</span>
+			<span className="result-stat__value">{value}</span>
+		</div>
+	);
+}
+
+function PokemonReveal({ target }) {
+	return (
+		<div className="end-screen__pokemon-stack">
+			<img
+				src={target.sprite_pixel}
+				alt=""
+				className="end-screen__pokemon-pixel"
+				aria-hidden="true"
+			/>
+			<img src={target.img_poke} alt={target.nome} className="end-screen__pokemon" />
+		</div>
+	);
+}
+
+export default function Win({ target, guesses, mode, challengeType, onAgain }) {
 	const [stage, setStage] = useState(0);
 
 	useEffect(() => {
@@ -87,100 +102,79 @@ export default function Win({ target, guesses, mode, onAgain }) {
 	}, [target]);
 
 	return (
-		<div className="relative flex-1 flex flex-col items-center justify-center gap-4 p-5 bg-gradient-radial from-[#2a1c5a] to-bg-deep safe-top safe-bottom"
-			style={{ background: 'radial-gradient(ellipse at center, #2a1c5a 0%, #0c0a1a 80%)' }}>
+		<div className="end-screen end-screen--win">
 			{stage >= 3 && <Confetti />}
 
-			<div className="flex items-center justify-center min-h-[240px]">
+			<div className="end-screen__shell">
+				<motion.div
+					initial={{ y: -12, opacity: 0 }}
+					animate={{ y: 0, opacity: 1 }}
+					className="end-screen__eyebrow"
+				>
+					<Trophy size={17} strokeWidth={2.8} />
+					<span>CAPTURA CONFIRMADA</span>
+				</motion.div>
+
+				<div className="end-screen__stage">
+					<div className="end-screen__reveal-slot">
+						<AnimatePresence mode="wait">
+							{stage < 2 ? (
+								<motion.div
+									key="disc"
+									className="end-screen__reveal-item"
+									exit={{ scale: 2.4, opacity: 0 }}
+									transition={{ duration: 0.5 }}
+								>
+									<CaptureDisc />
+								</motion.div>
+							) : (
+								<motion.div
+									key="pokemon"
+									className="end-screen__reveal-item end-screen__pokemon-motion"
+									initial={{ scale: 0, opacity: 0, y: 20 }}
+									animate={{ scale: 1, opacity: 1, y: 0 }}
+									transition={{ type: 'spring', stiffness: 180, damping: 12 }}
+								>
+									<PokemonReveal target={target} />
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</div>
+				</div>
+
 				<AnimatePresence>
-					{stage < 2 && (
-						<motion.div key="orb" exit={{ scale: 3, opacity: 0 }} transition={{ duration: 0.5 }}>
-							<Orb />
+					{stage >= 3 && (
+						<motion.div
+							initial={{ y: 20, opacity: 0 }}
+							animate={{ y: 0, opacity: 1 }}
+							transition={{ delay: 0.15, duration: 0.45 }}
+							className="end-screen__content"
+						>
+							<h2 className="end-screen__title end-screen__title--win">VITÓRIA</h2>
+							<p className="end-screen__name">{target.nome}</p>
+
+							<div className="result-stat-grid">
+								<ResultStat label="CHUTES" value={guesses.length} />
+								<ResultStat label="TIPO" value={target.tipos.join('/')} />
+								<ResultStat label="GER" value={target.geracao} />
+								<ResultStat label="COR" value={target.cor} />
+							</div>
+
+							{mode && (
+								<p className="end-screen__mode">
+									<Sparkles size={14} strokeWidth={2.8} />
+									{challengeType === 'daily' ? 'POKÉMON DO DIA' : `MODO ${mode.label}`}
+								</p>
+							)}
+
+							<button type="button" onClick={onAgain} className="pixel-action-button">
+								<RotateCcw size={16} strokeWidth={2.8} />
+								<span>JOGAR DE NOVO</span>
+							</button>
 						</motion.div>
-					)}
-					{stage >= 2 && (
-						<motion.img
-							key="creature"
-							src={target.img_poke}
-							alt={target.nome}
-							className="w-56 h-56 object-contain"
-							initial={{ scale: 0, opacity: 0 }}
-							animate={{ scale: 1, opacity: 1 }}
-							transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-						/>
 					)}
 				</AnimatePresence>
 			</div>
-
-			<AnimatePresence>
-				{stage >= 3 && (
-					<motion.div
-						initial={{ y: 20, opacity: 0 }}
-						animate={{ y: 0, opacity: 1 }}
-						transition={{ delay: 0.2, duration: 0.5 }}
-						className="text-center"
-					>
-						<h2
-							className="font-pixel text-3xl text-accent tracking-[3px]"
-							style={{ textShadow: '4px 4px 0 #0c0a1a, 0 0 12px rgba(255,210,63,0.5)' }}
-						>
-							VITÓRIA!
-						</h2>
-						<p className="font-mono text-2xl text-txt mt-3 tracking-[1px]">
-							É <span className="font-pixel text-base text-accent-pink tracking-[2px]">{target.nome}</span>!
-						</p>
-					</motion.div>
-				)}
-			</AnimatePresence>
-
-			<AnimatePresence>
-				{stage >= 3 && (
-					<motion.div
-						initial={{ y: 20, opacity: 0 }}
-						animate={{ y: 0, opacity: 1 }}
-						transition={{ delay: 0.4, duration: 0.5 }}
-						className="flex gap-3.5"
-					>
-						<div className="flex flex-col items-center gap-0.5">
-							<span className="font-pixel text-[6px] text-txt-dim tracking-[1px]">TENTATIVAS</span>
-							<span className="font-mono text-2xl text-accent">{guesses.length}</span>
-						</div>
-						<div className="flex flex-col items-center gap-0.5">
-							<span className="font-pixel text-[6px] text-txt-dim tracking-[1px]">TIPO</span>
-							<span className="font-mono text-2xl text-accent">{target.tipos.join('/')}</span>
-						</div>
-						<div className="flex flex-col items-center gap-0.5">
-							<span className="font-pixel text-[6px] text-txt-dim tracking-[1px]">GERAÇÃO</span>
-							<span className="font-mono text-2xl text-accent">{target.geracao}</span>
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
-
-			{mode && stage >= 3 && (
-				<p className="font-pixel text-[8px] text-txt-dim tracking-[2px] mt-1">
-					MODO {mode.label}
-				</p>
-			)}
-
-			<AnimatePresence>
-				{stage >= 3 && (
-					<motion.div
-						initial={{ y: 20, opacity: 0 }}
-						animate={{ y: 0, opacity: 1 }}
-						transition={{ delay: 0.6, duration: 0.5 }}
-						className="flex gap-2.5 mt-2"
-					>
-						<button
-							type="button"
-							onClick={onAgain}
-							className="px-4.5 py-3 bg-accent text-bg-deep font-pixel text-[10px] tracking-[1px] border-2 border-b-4 border-bg-deep rounded-sm active:translate-y-0.5 active:border-b-2"
-						>
-							JOGAR DE NOVO
-						</button>
-					</motion.div>
-				)}
-			</AnimatePresence>
 		</div>
 	);
 }

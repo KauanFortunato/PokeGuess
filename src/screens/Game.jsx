@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import { Lightbulb, Settings2 } from 'lucide-react';
 import { FilterPoke } from '../api/filterPoke';
 import { fetchPokemonData } from '../api/pokeApiService';
 import { haptics } from '../game/feedback';
@@ -28,7 +29,7 @@ function getHintValue(target, key) {
 	return target[key] || '';
 }
 
-export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings }) {
+export default function Game({ target, mode, challengeType, gens, onWin, onLose, onOpenSettings }) {
 	const [term, setTerm] = useState('');
 	const [suggestions, setSuggestions] = useState([]);
 	const [guesses, setGuesses] = useState([]);
@@ -131,7 +132,7 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 			transition={{ duration: 0.4 }}
 			className="flex-1 flex flex-col safe-top safe-bottom bg-bg-deep items-center"
 		>
-		<div className="w-full max-w-[640px] flex-1 flex flex-col px-2.5 pt-2 pb-2">
+		<div className="w-full max-w-[920px] flex-1 flex flex-col px-2.5 sm:px-4 pt-2 pb-2">
 			<div className="flex items-center justify-between px-1 pb-2.5 border-b-2 border-line-soft gap-2">
 				<button
 					type="button"
@@ -139,9 +140,10 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 						haptics.tap();
 						onOpenSettings();
 					}}
-					className="w-9 h-9 bg-bg-card border-2 border-b-[3px] border-line-soft rounded-sm flex items-center justify-center font-pixel text-base text-txt active:translate-y-px active:border-b-2"
+					className="pixel-icon-button"
+					aria-label="Abrir ajustes"
 				>
-					⌗
+					<Settings2 size={18} strokeWidth={2.6} />
 				</button>
 
 				<div className="flex-1 text-center">
@@ -152,13 +154,15 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 						</span>
 					</div>
 					<p className="font-mono text-base text-txt-dim tracking-[2px] mt-1">
-						CHUTES: {guesses.length}
+						{challengeType === 'daily' ? 'DIÁRIO · ' : ''}CHUTES: {guesses.length}
 						{isInfinite ? '' : `/${maxGuesses}`}
 					</p>
 				</div>
 
 				<div className="min-w-9 h-9 bg-bg-card border-2 border-b-[3px] border-accent rounded-sm flex items-center justify-center px-1.5">
-					<span className="font-pixel text-xs text-accent">{mode?.sub ?? '∞'}</span>
+					<span className="font-pixel text-[9px] text-accent">
+						{challengeType === 'daily' ? 'DIA' : mode?.sub ?? '∞'}
+					</span>
 				</div>
 			</div>
 
@@ -173,7 +177,8 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 					)}
 				>
 					<span className="px-1.5 py-1 bg-bg-deep border border-accent rounded-sm font-pixel text-[9px] text-accent tracking-[1px]">
-						★ DICA
+						<Lightbulb className="inline mr-1 align-[-2px]" size={13} strokeWidth={2.6} />
+						DICA
 					</span>
 					<div className="flex-1">
 						{revealedHints.length === 0 ? (
@@ -203,6 +208,7 @@ export default function Game({ target, mode, gens, onWin, onLose, onOpenSettings
 			) : (
 				<div className="mt-2 px-2.5 py-1.5 bg-bg-mid border border-line-soft rounded-sm flex items-center gap-2.5 min-h-11">
 					<span className="px-1.5 py-1 bg-bg-deep border border-accent rounded-sm font-pixel text-[9px] text-accent tracking-[1px]">
+						<Lightbulb className="inline mr-1 align-[-2px]" size={13} strokeWidth={2.6} />
 						DICA
 					</span>
 					<p className="flex-1 text-txt font-mono text-base">{baseHint}</p>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { getDailyPokemon } from './api/dailyPoke';
 import getRandomPokemon from './api/randomPoke';
 import { setMuted as setFeedbackMuted } from './game/feedback';
 import { MODES, DEFAULT_MODE } from './game/modes';
@@ -38,6 +39,7 @@ export default function App() {
 	const [target, setTarget] = useState(null);
 	const [guesses, setGuesses] = useState([]);
 	const [gaveUp, setGaveUp] = useState(false);
+	const [challengeType, setChallengeType] = useState('random');
 	const [loadingTarget, setLoadingTarget] = useState(false);
 	const [error, setError] = useState(null);
 	const [settingsOpen, setSettingsOpen] = useState(false);
@@ -49,11 +51,14 @@ export default function App() {
 	const mode = MODES[modeKey];
 
 	const drawTarget = useCallback(
-		async (overrideGens) => {
+		async ({ overrideGens, challenge = challengeType } = {}) => {
 			setLoadingTarget(true);
 			setError(null);
 			try {
-				const p = await getRandomPokemon(overrideGens || gens);
+				const p =
+					challenge === 'daily'
+						? await getDailyPokemon()
+						: await getRandomPokemon(overrideGens || gens);
 				if (!p) throw new Error('Falha ao obter Pokémon');
 				setTarget(p);
 			} catch (err) {
@@ -62,13 +67,22 @@ export default function App() {
 				setLoadingTarget(false);
 			}
 		},
-		[gens]
+		[challengeType, gens]
 	);
 
 	const startGame = useCallback(async () => {
+		setChallengeType('random');
 		setGuesses([]);
 		setGaveUp(false);
-		await drawTarget();
+		await drawTarget({ challenge: 'random' });
+		setScreen('game');
+	}, [drawTarget]);
+
+	const startDaily = useCallback(async () => {
+		setChallengeType('daily');
+		setGuesses([]);
+		setGaveUp(false);
+		await drawTarget({ challenge: 'daily' });
 		setScreen('game');
 	}, [drawTarget]);
 
@@ -104,30 +118,39 @@ export default function App() {
 			if (wasInGame) {
 				setGuesses([]);
 				setGaveUp(false);
-				await drawTarget(newGens);
+				await drawTarget({ overrideGens: newGens });
 			}
 		},
 		[screen, drawTarget]
 	);
 
+	const playAgain = challengeType === 'daily' ? startDaily : startGame;
+
 	let content;
 	if (screen === 'splash') {
 		content = (
-			<Splash
-				onStart={startGame}
-				onOpenSettings={() => setSettingsOpen(true)}
-				mode={mode}
-				gens={gens}
+				<Splash
+					onStart={startGame}
+					onDailyStart={startDaily}
+					onOpenSettings={() => setSettingsOpen(true)}
+					mode={mode}
+					gens={gens}
 			/>
 		);
 	} else if (screen === 'game') {
 		if (loadingTarget || !target) {
-			content = <LoadingScreen label="SORTEANDO CRIATURA" error={error} />;
+			content = (
+				<LoadingScreen
+					label={challengeType === 'daily' ? 'CARREGANDO DESAFIO DIÁRIO' : 'SORTEANDO CRIATURA'}
+					error={error}
+				/>
+			);
 		} else {
 			content = (
 				<Game
 					target={target}
 					mode={mode}
+					challengeType={challengeType}
 					gens={gens}
 					onWin={handleWin}
 					onLose={handleLose}
@@ -137,11 +160,23 @@ export default function App() {
 		}
 	} else if (screen === 'win') {
 		content = (
-			<Win target={target} guesses={guesses} mode={mode} onAgain={startGame} />
+			<Win
+				target={target}
+				guesses={guesses}
+				mode={mode}
+				challengeType={challengeType}
+				onAgain={playAgain}
+			/>
 		);
 	} else if (screen === 'lose') {
 		content = (
-			<Lose target={target} mode={mode} gaveUp={gaveUp} onAgain={startGame} />
+			<Lose
+				target={target}
+				mode={mode}
+				challengeType={challengeType}
+				gaveUp={gaveUp}
+				onAgain={playAgain}
+			/>
 		);
 	}
 
