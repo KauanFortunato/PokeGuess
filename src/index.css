@@ -17,6 +17,7 @@
 		font-family: 'VT323', monospace;
 		-webkit-tap-highlight-color: transparent;
 		overscroll-behavior: none;
+		overflow-x: hidden;
 	}
 	* {
 		box-sizing: border-box;
@@ -575,6 +576,44 @@
 
 	.settings-command {
 		margin-top: 0;
+	}
+
+	.settings-time-label {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: 10px;
+		color: #94a4c4;
+		font-family: 'Press Start 2P', monospace;
+		font-size: 8px;
+		letter-spacing: 1px;
+	}
+
+	.settings-time-input {
+		width: 100%;
+		min-height: 42px;
+		margin-top: 7px;
+		border: 2px solid #3d3870;
+		border-bottom-width: 4px;
+		border-radius: 6px;
+		background: #1a1730;
+		color: #f4f0e8;
+		padding: 8px 10px;
+		font-family: 'Press Start 2P', monospace;
+		font-size: 10px;
+		letter-spacing: 1px;
+	}
+
+	.settings-time-input:disabled {
+		opacity: 0.6;
+	}
+
+	.settings-note {
+		margin-top: 8px;
+		color: #94a4c4;
+		font-family: 'VT323', monospace;
+		font-size: 16px;
+		line-height: 1.1;
 	}
 
 	.settings-command--danger {

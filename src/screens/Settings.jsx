@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import {
+	Bell,
+	BellOff,
 	Check,
+	Clock3,
 	Flag,
 	Gamepad2,
 	Home,
@@ -36,6 +39,9 @@ export default function Settings({
 	initialMode,
 	initialGens,
 	initialMuted,
+	initialReminderEnabled,
+	initialReminderTime,
+	reminderStatus,
 	inGame,
 	onApply,
 	onGiveUp,
@@ -45,14 +51,25 @@ export default function Settings({
 	const [mode, setMode] = useState(initialMode);
 	const [gens, setGens] = useState(initialGens);
 	const [muted, setMuted] = useState(initialMuted);
+	const [reminderEnabled, setReminderEnabled] = useState(initialReminderEnabled);
+	const [reminderTime, setReminderTime] = useState(initialReminderTime || '19:00');
 
 	useEffect(() => {
 		if (open) {
 			setMode(initialMode);
 			setGens(initialGens);
 			setMuted(initialMuted);
+			setReminderEnabled(initialReminderEnabled);
+			setReminderTime(initialReminderTime || '19:00');
 		}
-	}, [open, initialMode, initialGens, initialMuted]);
+	}, [
+		open,
+		initialMode,
+		initialGens,
+		initialMuted,
+		initialReminderEnabled,
+		initialReminderTime,
+	]);
 
 	if (!open) return null;
 
@@ -70,10 +87,21 @@ export default function Settings({
 	const dirty =
 		mode !== initialMode ||
 		!arraysEqual(gens, initialGens) ||
-		muted !== initialMuted;
+		muted !== initialMuted ||
+		reminderEnabled !== initialReminderEnabled ||
+		reminderTime !== (initialReminderTime || '19:00');
 
-	const apply = () => onApply({ mode, gens, muted });
+	const apply = () =>
+		onApply({
+			mode,
+			gens,
+			muted,
+			reminderEnabled,
+			reminderTime,
+		});
+
 	const SoundIcon = muted ? VolumeX : Volume2;
+	const ReminderIcon = reminderEnabled ? Bell : BellOff;
 
 	return (
 		<div className="settings-overlay" onClick={onClose}>
@@ -86,7 +114,7 @@ export default function Settings({
 						<div className="min-w-0">
 							<h2 className="font-pixel text-sm text-accent tracking-[2px]">AJUSTES</h2>
 							<p className="font-mono text-base leading-none text-txt-dim">
-								modo, gerações e som
+								modo, geracoes e lembretes
 							</p>
 						</div>
 					</div>
@@ -133,7 +161,7 @@ export default function Settings({
 					<section className="settings-section">
 						<div className="settings-section__title">
 							<Layers size={15} strokeWidth={2.6} />
-							<span>GERAÇÕES</span>
+							<span>GERACOES</span>
 						</div>
 						<div className="settings-gen-grid">
 							{ALL_GENS.map((g) => {
@@ -165,7 +193,7 @@ export default function Settings({
 					<section className="settings-section">
 						<div className="settings-section__title">
 							<SoundIcon size={15} strokeWidth={2.6} />
-							<span>SOM / VIBRAÇÃO</span>
+							<span>SOM / VIBRACAO</span>
 						</div>
 						<button
 							type="button"
@@ -176,6 +204,42 @@ export default function Settings({
 							<SoundIcon size={17} strokeWidth={2.7} />
 							<span>{muted ? 'DESLIGADO' : 'LIGADO'}</span>
 						</button>
+					</section>
+
+					<section className="settings-section">
+						<div className="settings-section__title">
+							<ReminderIcon size={15} strokeWidth={2.6} />
+							<span>LEMBRETE DIARIO</span>
+						</div>
+
+						<button
+							type="button"
+							onClick={() => setReminderEnabled((value) => !value)}
+							aria-pressed={reminderEnabled}
+							className={clsx('settings-toggle', reminderEnabled && 'settings-toggle--active')}
+						>
+							<ReminderIcon size={17} strokeWidth={2.7} />
+							<span>{reminderEnabled ? 'ATIVADO' : 'DESATIVADO'}</span>
+						</button>
+
+						<label htmlFor="daily-reminder-time" className="settings-time-label">
+							<Clock3 size={15} strokeWidth={2.7} />
+							<span>HORARIO</span>
+						</label>
+						<input
+							id="daily-reminder-time"
+							type="time"
+							value={reminderTime}
+							onChange={(event) => setReminderTime(event.target.value)}
+							className="settings-time-input"
+							disabled={!reminderEnabled}
+						/>
+
+						{reminderStatus && (
+							<p className="settings-note">
+								{reminderStatus}
+							</p>
+						)}
 					</section>
 
 					{inGame && (

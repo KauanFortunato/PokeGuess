@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CalendarDays, Play, Settings2 } from 'lucide-react';
 import { haptics } from '../game/feedback';
@@ -12,7 +12,22 @@ const STARS = Array.from({ length: 22 }, (_, i) => ({
 	delay: `${(i % 5) * 0.3}s`,
 }));
 
-export default function Splash({ onStart, onDailyStart, onOpenSettings, mode, gens }) {
+const DAILY_STATUS_LABELS = {
+	in_progress: 'EM ANDAMENTO',
+	won: 'VITORIA',
+	lost: 'DERROTA',
+	gave_up: 'DESISTIU',
+};
+
+export default function Splash({
+	onStart,
+	onDailyStart,
+	onOpenSettings,
+	mode,
+	gens,
+	dailyProgress,
+	dailyStreak,
+}) {
 	const [exiting, setExiting] = useState(false);
 	const [showFlash, setShowFlash] = useState(false);
 
@@ -31,6 +46,10 @@ export default function Splash({ onStart, onDailyStart, onOpenSettings, mode, ge
 			: gens && gens.length > 0
 			? `GEN ${gens.join(',')}`
 			: 'TODAS';
+
+	const dailyStatusLabel = dailyProgress
+		? DAILY_STATUS_LABELS[dailyProgress.status] || DAILY_STATUS_LABELS.in_progress
+		: null;
 
 	return (
 		<div className="relative flex-1 w-full h-full flex flex-col items-center justify-center p-6 overflow-hidden bg-gradient-to-b from-[#1a1735] to-bg-deep">
@@ -140,7 +159,7 @@ export default function Splash({ onStart, onDailyStart, onOpenSettings, mode, ge
 						className="splash-daily-button"
 					>
 						<CalendarDays size={16} strokeWidth={2.7} />
-						<span>POKÉMON DO DIA</span>
+						<span>POKEMON DO DIA</span>
 					</button>
 				</div>
 
@@ -149,6 +168,25 @@ export default function Splash({ onStart, onDailyStart, onOpenSettings, mode, ge
 						MODO {mode.label} · {gensLabel}
 					</p>
 				)}
+
+				<div className="mt-3 min-h-[30px] text-center">
+					{dailyStatusLabel ? (
+						<p className="font-pixel text-[8px] text-accent-pink tracking-[1px]">
+							HOJE: {dailyStatusLabel}
+							{dailyProgress.attemptsUsed > 0
+								? ` · ${dailyProgress.attemptsUsed} CHUTES`
+								: ''}
+						</p>
+					) : (
+						<p className="font-pixel text-[8px] text-txt-faint tracking-[1px]">
+							POKEMON DO DIA AINDA NAO JOGADO
+						</p>
+					)}
+					<p className="font-pixel text-[8px] text-accent tracking-[1px] mt-1">
+						STREAK: {dailyStreak?.current ?? 0}
+						{dailyStreak?.best ? ` · MELHOR ${dailyStreak.best}` : ''}
+					</p>
+				</div>
 			</motion.div>
 
 			<motion.p

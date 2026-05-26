@@ -1,156 +1,165 @@
 <p align="center">
-  <img src="./assets/icon.png" alt="PokeGuess logo" width="160" />
+  <img src="./assets/icon.png" alt="PokeGuess logo" width="140" />
 </p>
 
-<h1 align="center">PokeGuess — Retro Edition</h1>
+<h1 align="center">PokeGuess - Retro Edition</h1>
 
 <p align="center">
-  <em>Adivinhe o Pokémon. Estilo Wordle, 898 criaturas, em pixel art retrô. Instalável como PWA.</em>
+  Guess the Pokemon. Wordle-style game with a daily challenge, retro visuals, and web + mobile support.
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white" alt="Vite 6" />
-  <img src="https://img.shields.io/badge/React-19.1-61dafb?logo=react&logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss&logoColor=white" alt="Tailwind 3.4" />
-  <img src="https://img.shields.io/badge/PWA-installable-5a0fc8?logo=pwa&logoColor=white" alt="PWA" />
-  <img src="https://img.shields.io/badge/license-MIT-ffd23f" alt="License MIT" />
-</p>
+## Overview
 
-<p align="center">
-  <img src="./assets/demo.gif" alt="PokeGuess demo" width="640" />
-</p>
+PokeGuess is a React + Vite game where the player guesses a target Pokemon using attribute comparisons.
 
-<p align="center">
-  <a href="./assets/demo.mp4"><em>▶ Versão MP4 (HD)</em></a>
-</p>
+The project now supports:
 
----
+- Web app (including PWA behavior)
+- Capacitor mobile packaging for Android
+- Daily deterministic challenge
+- Optional daily reminder notifications (native mobile only)
 
-## ✨ Features
+## Tech Stack
 
-- 🎮 **3 modos de jogo**
-  - **Normal** — tentativas infinitas até acertar
-  - **Difícil** — 15 chutes
-  - **Nightmare** — 6 chutes, sem dicas
-- 🔢 **Filtro por geração** — escolha 1 a 8 gerações individualmente ou todas as 898 criaturas
-- 🧠 **6 colunas de comparação** por chute — Tipo, Geração (ou Evolução), Cor, Habitat, Altura, Peso, com indicadores ↑↓ pras diferenças numéricas
-- 💡 **Sistema de dicas** — após 10 chutes (Normal/Difícil), revele atributos do alvo um a um
-- 🪄 **Coluna dinâmica GER ↔ EVO** — quando só 1 geração é selecionada, a coluna troca pra Estágio de Evolução automaticamente
-- 📳 **Haptics** via `navigator.vibrate` (Android Chrome)
-- 🔊 **Cries oficiais** dos Pokémon na vitória e derrota (via PokeAPI)
-- 🎨 **Estética retrô** — Press Start 2P, sprites GB/GBA, paleta GB Color
-- ⚡ **Prefetch inteligente** — as sugestões são pré-carregadas pra tap-to-submit ser instantâneo
-- 📱 **PWA instalável** — service worker offline + manifest, funciona como app nativo
-- 🌐 **108 KB gzipped** — bundle enxuto, carrega instantâneo
+- React 19
+- Vite 6
+- Tailwind CSS 3
+- Framer Motion
+- PWA via `vite-plugin-pwa`
+- Capacitor 8 (`@capacitor/core`, `@capacitor/android`, `@capacitor/local-notifications`)
 
----
+## Project Structure
 
-## 🕹️ Como jogar
+```text
+src/
+  api/                  # PokeAPI data access + daily target logic
+  game/                 # game mode logic, gens, feedback, daily progress
+  platform/             # platform-specific services (notifications)
+  screens/              # Splash/Game/Win/Lose/Settings
+  components/           # Board, input, cards
+```
 
-1. **Tela inicial** — aperte ▶ PRESS START. O botão ⌗ no canto abre o menu de ajustes (modos, gerações, som, desistir).
-2. **Digite o nome** da criatura no campo de busca. As sugestões aparecem com o sprite — toque na que quiser chutar.
-3. **Cada chute revela 6 células** com cores:
-   - 🟩 **Verde** — atributo bate exato
-   - 🟨 **Amarelo** — atributo está perto (tipo sobreposto, ±1 geração, ±0.3m altura, ±8kg peso)
-   - 🟥 **Vermelho** — errou
-   - Setas **↑ / ↓** indicam se o alvo é maior ou menor (altura, peso, geração)
-4. **Acerte antes** do limite de tentativas (depende do modo).
-5. **No fim**: animação de vitória com cry da criatura + confete, ou tela de derrota com a criatura revelada.
+## Web Development
 
----
+Requirements:
 
-## 🚀 Rodar localmente
+- Node.js 18+
 
-Precisa de [Node.js 18+](https://nodejs.org/).
+Install and run:
 
 ```bash
-git clone https://github.com/KauanFortunato/PokeGuess.git
-cd PokeGuess
 npm install
 npm run dev
 ```
 
-Abre [http://localhost:5173](http://localhost:5173). O Vite mostra também o IP de rede pra testar no celular (mesma Wi-Fi).
-
-### Build de produção
+Build and preview:
 
 ```bash
-npm run build      # gera dist/
-npm run preview    # serve o dist/ localmente pra testar
+npm run build
+npm run preview
 ```
 
-### Instalar como PWA
+Run tests:
 
-No Chrome (desktop ou Android): barra de endereço → ícone de "instalar".
-No iPhone Safari: Compartilhar → "Adicionar à Tela de Início".
-
----
-
-## 🛠️ Stack
-
-| Camada | Tech |
-| --- | --- |
-| Build | [Vite 6](https://vitejs.dev/) |
-| UI | [React 19.1](https://react.dev/) + [Tailwind CSS 3.4](https://tailwindcss.com/) |
-| Animações | [framer-motion](https://www.framer.com/motion/) + CSS keyframes |
-| PWA | [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) (Workbox) |
-| API | [PokeAPI](https://pokeapi.co/) (sprites, dados de espécies, cadeias de evolução, cries) |
-| Áudio | HTML5 `Audio` API |
-| Haptics | Web `navigator.vibrate` |
-| Fontes | [@fontsource/press-start-2p](https://fontsource.org/) + [VT323](https://fontsource.org/) (self-hosted, sem CDN) |
-| Helpers | [clsx](https://github.com/lukeed/clsx) |
-
----
-
-## 📂 Estrutura
-
-```
-.
-├── index.html
-├── package.json
-├── vite.config.js          # vite + plugin-pwa + plugin-react
-├── tailwind.config.js      # tokens do tema (cores, fontes, keyframes)
-├── postcss.config.js
-├── public/
-│   ├── icons/              # PWA icons (192, 512, 512-maskable)
-│   └── img/                # creature.png (mascote da splash)
-├── src/
-│   ├── api/
-│   │   ├── pokeApiService.js   # cliente PokeAPI: cache, prefetch, fetches paralelos
-│   │   ├── randomPoke.js       # sorteia Pokémon respeitando o filtro de geração
-│   │   ├── filterPoke.js       # filtra sugestões por nome + geração + prefetch
-│   │   └── comparePoke.js      # lógica de comparação dos 6 atributos
-│   ├── game/
-│   │   ├── modes.js            # Normal / Difícil / Nightmare
-│   │   ├── gens.js             # ranges de gerações 1-8 e helpers
-│   │   ├── feedback.js         # navigator.vibrate + mute global
-│   │   └── sound.js            # cries via HTML5 Audio
-│   ├── screens/
-│   │   ├── Splash.jsx          # tela inicial: silhuetas + mascote + POKE/GUESS
-│   │   ├── Game.jsx            # board 6×6, FlipCell, input com sugestões
-│   │   ├── Win.jsx             # orb spin + creature reveal + confete + cry
-│   │   ├── Lose.jsx            # shake + revelação da criatura
-│   │   └── Settings.jsx        # modal de ajustes
-│   ├── components/
-│   │   ├── Board.jsx
-│   │   ├── FlipCell.jsx        # 3D rotateX flip via CSS
-│   │   ├── GuessRow.jsx
-│   │   └── InputRow.jsx
-│   ├── App.jsx                 # state machine (splash → game → win/lose)
-│   ├── main.jsx                # entry point
-│   └── index.css               # Tailwind base + reset
-└── assets/                     # README assets (logo, demo.gif, demo.mp4)
+```bash
+npm run test
 ```
 
----
+## Mobile with Capacitor
 
-## 🤝 Créditos
+Capacitor config is in `capacitor.config.json`:
 
-- **Sprites & dados dos Pokémon** — [PokeAPI](https://pokeapi.co/) (sprites GB/GBA + official artwork + species + cries)
-- **Fontes** — [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) por CodeMan38 e [VT323](https://fonts.google.com/specimen/VT323) por Peter Hull
+- `appId`: `com.pokeguess.app`
+- `appName`: `PokeGuess`
+- `webDir`: `dist`
 
----
+Sync web build into native projects:
 
-## 📝 Licença
+```bash
+npm run cap:sync
+```
 
-[MIT](./LICENSE.txt). Pokémon e seus nomes são marcas registradas da Nintendo / Game Freak — este é um projeto educacional sem fins lucrativos.
+Add Android project (already done in this branch):
+
+```bash
+npx cap add android
+```
+
+Open Android Studio:
+
+```bash
+npm run cap:open:android
+```
+
+Run on device/emulator:
+
+```bash
+npm run cap:run:android
+```
+
+### iOS
+
+iOS build requires macOS + Xcode. From a macOS environment:
+
+```bash
+npx cap add ios
+npx cap open ios
+```
+
+## Daily Challenge
+
+Daily challenge behavior:
+
+- Deterministic by UTC day (`YYYY-MM-DD` from `toISOString()`).
+- Same Pokemon for all users on the same UTC day.
+- Pokemon ID is generated by hash and constrained to `1..898`.
+- Daily target data is cached locally.
+
+Daily progress is stored locally:
+
+- status (`in_progress`, `won`, `lost`, `gave_up`)
+- attempts used
+- daily streak (`current`, `best`)
+
+Daily progress is isolated from normal/random mode.
+
+## Daily Reminders
+
+Settings includes:
+
+- Toggle: "Lembrete diario"
+- Time picker (default `19:00`)
+
+Behavior:
+
+- Permission is requested only when user enables the reminder.
+- Existing daily reminder notification is canceled before scheduling a new one.
+- On native mobile (Android/iOS), scheduling uses Capacitor Local Notifications.
+- On web, notifications are not scheduled and UI shows an informational fallback message.
+
+Notification content:
+
+- Title: `Pokemon do dia disponivel`
+- Body: `O Pokemon do dia ja esta disponivel!`
+
+## Limitations
+
+- Native reminders require a Capacitor mobile build (not browser runtime).
+- iOS packaging cannot be completed on Windows.
+- App still depends on PokeAPI availability for data not already cached.
+
+## Future TODOs
+
+- Optional deep link routing so notification tap always opens daily challenge flow.
+- Better offline-first local dataset strategy for fully disconnected gameplay.
+
+## Legal Note
+
+This is a fan/learning project.
+
+Pokemon names, assets, and related intellectual property belong to Nintendo / Game Freak / The Pokemon Company.
+Be careful with licensing and IP implications before any public distribution or monetization.
+
+## License
+
+[MIT](./LICENSE.txt)

@@ -27,7 +27,14 @@ function PokemonReveal({ target }) {
 	);
 }
 
-export default function Lose({ target, mode, challengeType, gaveUp, onAgain }) {
+export default function Lose({
+	target,
+	mode,
+	challengeType,
+	gaveUp,
+	onAgain,
+	dailyStreak,
+}) {
 	useEffect(() => {
 		haptics.error();
 		const timer = setTimeout(() => playCry(target?.id), 400);
@@ -89,11 +96,21 @@ export default function Lose({ target, mode, challengeType, gaveUp, onAgain }) {
 					{mode && (
 						<p className="end-screen__mode end-screen__mode--danger">
 							<Skull size={14} strokeWidth={2.8} />
-							{challengeType === 'daily' ? 'POKÉMON DO DIA' : `MODO ${mode.label}`}
+							{challengeType === 'daily' ? 'POKEMON DO DIA' : `MODO ${mode.label}`}
+						</p>
+					)}
+					{challengeType === 'daily' && (
+						<p className="end-screen__caption">
+							STREAK {dailyStreak?.current ?? 0}
+							{dailyStreak?.best ? ` · MELHOR ${dailyStreak.best}` : ''}
 						</p>
 					)}
 
-					<button type="button" onClick={onAgain} className="pixel-action-button pixel-action-button--danger">
+					<button
+						type="button"
+						onClick={onAgain}
+						className="pixel-action-button pixel-action-button--danger"
+					>
 						<RotateCcw size={16} strokeWidth={2.8} />
 						<span>TENTAR DE NOVO</span>
 					</button>

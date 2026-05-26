@@ -81,7 +81,14 @@ function PokemonReveal({ target }) {
 	);
 }
 
-export default function Win({ target, guesses, mode, challengeType, onAgain }) {
+export default function Win({
+	target,
+	guesses,
+	mode,
+	challengeType,
+	onAgain,
+	dailyStreak,
+}) {
 	const [stage, setStage] = useState(0);
 
 	useEffect(() => {
@@ -150,7 +157,7 @@ export default function Win({ target, guesses, mode, challengeType, onAgain }) {
 							transition={{ delay: 0.15, duration: 0.45 }}
 							className="end-screen__content"
 						>
-							<h2 className="end-screen__title end-screen__title--win">VITÓRIA</h2>
+							<h2 className="end-screen__title end-screen__title--win">VITORIA</h2>
 							<p className="end-screen__name">{target.nome}</p>
 
 							<div className="result-stat-grid">
@@ -163,7 +170,13 @@ export default function Win({ target, guesses, mode, challengeType, onAgain }) {
 							{mode && (
 								<p className="end-screen__mode">
 									<Sparkles size={14} strokeWidth={2.8} />
-									{challengeType === 'daily' ? 'POKÉMON DO DIA' : `MODO ${mode.label}`}
+									{challengeType === 'daily' ? 'POKEMON DO DIA' : `MODO ${mode.label}`}
+								</p>
+							)}
+							{challengeType === 'daily' && (
+								<p className="end-screen__caption">
+									STREAK {dailyStreak?.current ?? 0}
+									{dailyStreak?.best ? ` · MELHOR ${dailyStreak.best}` : ''}
 								</p>
 							)}
 

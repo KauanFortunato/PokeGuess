@@ -29,7 +29,16 @@ function getHintValue(target, key) {
 	return target[key] || '';
 }
 
-export default function Game({ target, mode, challengeType, gens, onWin, onLose, onOpenSettings }) {
+export default function Game({
+	target,
+	mode,
+	challengeType,
+	gens,
+	onWin,
+	onLose,
+	onOpenSettings,
+	onGuessesChange,
+}) {
 	const [term, setTerm] = useState('');
 	const [suggestions, setSuggestions] = useState([]);
 	const [guesses, setGuesses] = useState([]);
@@ -81,6 +90,7 @@ export default function Game({ target, mode, challengeType, gens, onWin, onLose,
 			const nextGuesses = [...guesses, full];
 			const idx = nextGuesses.length - 1;
 			setGuesses(nextGuesses);
+			onGuessesChange?.(nextGuesses);
 			setAnimatingIndex(idx);
 
 			setTimeout(() => {

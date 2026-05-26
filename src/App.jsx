@@ -2,9 +2,27 @@ import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getDailyPokemon } from './api/dailyPoke';
 import getRandomPokemon from './api/randomPoke';
+import {
+	getDailyProgressForDate,
+	getDailyStreak,
+	patchDailyProgress,
+	shouldTrackDailyProgress,
+} from './game/dailyProgress';
 import { setMuted as setFeedbackMuted } from './game/feedback';
 import { MODES, DEFAULT_MODE } from './game/modes';
 import { ALL_GENS } from './game/gens';
+import {
+	cancelDailyReminderNotification,
+	checkReminderPermission,
+	formatReminderTime,
+	getReminderSupportMessage,
+	parseReminderTime,
+	readReminderSettings,
+	registerDailyReminderOpenListener,
+	requestReminderPermission,
+	scheduleDailyReminderNotification,
+	writeReminderSettings,
+} from './platform/notifications';
 import Splash from './screens/Splash';
 import Game from './screens/Game';
 import Win from './screens/Win';
@@ -44,25 +62,48 @@ export default function App() {
 	const [error, setError] = useState(null);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 
+	const [dailyTodayProgress, setDailyTodayProgress] = useState(() =>
+		getDailyProgressForDate()
+	);
+	const [dailyStreak, setDailyStreakState] = useState(() => getDailyStreak());
+	const [reminderSettings, setReminderSettings] = useState(() =>
+		readReminderSettings()
+	);
+	const [reminderStatus, setReminderStatus] = useState(() =>
+		getReminderSupportMessage()
+	);
+
+	const mode = MODES[modeKey];
+
+	const refreshDailySnapshot = useCallback(() => {
+		setDailyTodayProgress(getDailyProgressForDate());
+		setDailyStreakState(getDailyStreak());
+	}, []);
+
 	useEffect(() => {
 		setFeedbackMuted(muted);
 	}, [muted]);
 
-	const mode = MODES[modeKey];
+	useEffect(() => {
+		refreshDailySnapshot();
+	}, [refreshDailySnapshot]);
 
 	const drawTarget = useCallback(
 		async ({ overrideGens, challenge = challengeType } = {}) => {
 			setLoadingTarget(true);
 			setError(null);
 			try {
-				const p =
+				const nextTarget =
 					challenge === 'daily'
 						? await getDailyPokemon()
 						: await getRandomPokemon(overrideGens || gens);
-				if (!p) throw new Error('Falha ao obter Pokémon');
-				setTarget(p);
+
+				if (!nextTarget) throw new Error('Falha ao obter Pokemon');
+				setTarget(nextTarget);
+				return nextTarget;
 			} catch (err) {
-				setError(err.message || 'Erro de conexão');
+				setError(err.message || 'Erro de conexao');
+				return null;
 			} finally {
 				setLoadingTarget(false);
 			}
@@ -82,26 +123,100 @@ export default function App() {
 		setChallengeType('daily');
 		setGuesses([]);
 		setGaveUp(false);
-		await drawTarget({ challenge: 'daily' });
+		const nextTarget = await drawTarget({ challenge: 'daily' });
+		if (nextTarget) {
+			patchDailyProgress({
+				status: 'in_progress',
+				attemptsUsed: 0,
+				pokemonId: nextTarget.id,
+			});
+			refreshDailySnapshot();
+		}
 		setScreen('game');
-	}, [drawTarget]);
+	}, [drawTarget, refreshDailySnapshot]);
 
-	const handleWin = useCallback((gs) => {
-		setGuesses(gs);
-		setScreen('win');
-	}, []);
+	useEffect(() => {
+		let removeListener = null;
+		let cancelled = false;
 
-	const handleLose = useCallback((gs) => {
-		setGuesses(gs);
-		setGaveUp(false);
-		setScreen('lose');
-	}, []);
+		registerDailyReminderOpenListener(() => {
+			if (cancelled) return;
+			startDaily();
+		})
+			.then((dispose) => {
+				removeListener = dispose;
+			})
+			.catch(() => {
+				removeListener = null;
+			});
+
+		return () => {
+			cancelled = true;
+			if (typeof removeListener === 'function') {
+				removeListener();
+			}
+		};
+	}, [startDaily]);
+
+	const handleDailyGuessProgress = useCallback(
+		(nextGuesses) => {
+			if (!shouldTrackDailyProgress(challengeType)) return;
+			patchDailyProgress({
+				status: 'in_progress',
+				attemptsUsed: nextGuesses.length,
+				pokemonId: target?.id,
+			});
+			refreshDailySnapshot();
+		},
+		[challengeType, target, refreshDailySnapshot]
+	);
+
+	const handleWin = useCallback(
+		(gs) => {
+			setGuesses(gs);
+			if (shouldTrackDailyProgress(challengeType)) {
+				patchDailyProgress({
+					status: 'won',
+					attemptsUsed: gs.length,
+					pokemonId: target?.id,
+				});
+				refreshDailySnapshot();
+			}
+			setScreen('win');
+		},
+		[challengeType, target, refreshDailySnapshot]
+	);
+
+	const handleLose = useCallback(
+		(gs) => {
+			setGuesses(gs);
+			setGaveUp(false);
+			if (shouldTrackDailyProgress(challengeType)) {
+				patchDailyProgress({
+					status: 'lost',
+					attemptsUsed: gs.length,
+					pokemonId: target?.id,
+				});
+				refreshDailySnapshot();
+			}
+			setScreen('lose');
+		},
+		[challengeType, target, refreshDailySnapshot]
+	);
 
 	const giveUp = useCallback(() => {
 		setSettingsOpen(false);
 		setGaveUp(true);
+		if (shouldTrackDailyProgress(challengeType)) {
+			patchDailyProgress({
+				status: 'gave_up',
+				attemptsUsed: guesses.length,
+				pokemonId: target?.id,
+			});
+			refreshDailySnapshot();
+		}
 		setScreen('lose');
-	}, []);
+	}, [challengeType, guesses.length, target, refreshDailySnapshot]);
 
 	const backToMenu = useCallback(() => {
 		setSettingsOpen(false);
@@ -109,19 +224,83 @@ export default function App() {
 	}, []);
 
 	const applySettings = useCallback(
-		async ({ mode: newMode, gens: newGens, muted: newMuted }) => {
+		async ({
+			mode: newMode,
+			gens: newGens,
+			muted: newMuted,
+			reminderEnabled,
+			reminderTime,
+		}) => {
 			const wasInGame = screen === 'game';
 			setModeKey(newMode);
 			setGens(newGens);
 			setMuted(newMuted);
+
+			const parsedTime = parseReminderTime(reminderTime);
+			let nextReminderState = {
+				enabled: Boolean(reminderEnabled),
+				hour: parsedTime.hour,
+				minute: parsedTime.minute,
+				lastPermissionStatus: reminderSettings.lastPermissionStatus || 'unknown',
+			};
+			let nextReminderStatus = getReminderSupportMessage();
+
+			try {
+				if (nextReminderState.enabled) {
+					const supportMessage = getReminderSupportMessage();
+					if (supportMessage) {
+						nextReminderState.enabled = false;
+						nextReminderState.lastPermissionStatus = 'unsupported';
+						nextReminderStatus = supportMessage;
+					} else {
+						let permission = await checkReminderPermission();
+						if (
+							!permission.granted &&
+							(permission.status === 'prompt' ||
+								permission.status === 'prompt-with-rationale')
+						) {
+							permission = await requestReminderPermission();
+						}
+
+						nextReminderState.lastPermissionStatus = permission.status;
+
+						if (!permission.granted) {
+							nextReminderState.enabled = false;
+							nextReminderStatus =
+								'Permission denied. Enable notifications in system settings.';
+							await cancelDailyReminderNotification();
+						} else {
+							await scheduleDailyReminderNotification(parsedTime);
+							nextReminderStatus = `Daily reminder set for ${formatReminderTime(
+								parsedTime.hour,
+								parsedTime.minute
+							)}.`;
+						}
+					}
+				} else {
+					await cancelDailyReminderNotification();
+					nextReminderStatus = getReminderSupportMessage();
+				}
+			} catch (reminderError) {
+				nextReminderState.enabled = false;
+				nextReminderStatus = reminderError?.message
+					? `Reminder setup failed: ${reminderError.message}`
+					: 'Reminder setup failed on this device.';
+			}
+
+			writeReminderSettings(nextReminderState);
+			setReminderSettings(nextReminderState);
+			setReminderStatus(nextReminderStatus);
+
 			setSettingsOpen(false);
+
 			if (wasInGame) {
 				setGuesses([]);
 				setGaveUp(false);
 				await drawTarget({ overrideGens: newGens });
 			}
 		},
-		[screen, drawTarget]
+		[screen, drawTarget, reminderSettings.lastPermissionStatus]
 	);
 
 	const playAgain = challengeType === 'daily' ? startDaily : startGame;
@@ -129,19 +308,25 @@ export default function App() {
 	let content;
 	if (screen === 'splash') {
 		content = (
-				<Splash
-					onStart={startGame}
-					onDailyStart={startDaily}
-					onOpenSettings={() => setSettingsOpen(true)}
-					mode={mode}
-					gens={gens}
+			<Splash
+				onStart={startGame}
+				onDailyStart={startDaily}
+				onOpenSettings={() => setSettingsOpen(true)}
+				mode={mode}
+				gens={gens}
+				dailyProgress={dailyTodayProgress}
+				dailyStreak={dailyStreak}
 			/>
 		);
 	} else if (screen === 'game') {
 		if (loadingTarget || !target) {
 			content = (
 				<LoadingScreen
-					label={challengeType === 'daily' ? 'CARREGANDO DESAFIO DIÁRIO' : 'SORTEANDO CRIATURA'}
+					label={
+						challengeType === 'daily'
+							? 'CARREGANDO DESAFIO DIARIO'
+							: 'SORTEANDO CRIATURA'
+					}
 					error={error}
 				/>
 			);
@@ -155,6 +340,7 @@ export default function App() {
 					onWin={handleWin}
 					onLose={handleLose}
 					onOpenSettings={() => setSettingsOpen(true)}
+					onGuessesChange={handleDailyGuessProgress}
 				/>
 			);
 		}
@@ -166,6 +352,7 @@ export default function App() {
 				mode={mode}
 				challengeType={challengeType}
 				onAgain={playAgain}
+				dailyStreak={dailyStreak}
 			/>
 		);
 	} else if (screen === 'lose') {
@@ -176,6 +363,7 @@ export default function App() {
 				challengeType={challengeType}
 				gaveUp={gaveUp}
 				onAgain={playAgain}
+				dailyStreak={dailyStreak}
 			/>
 		);
 	}
@@ -188,6 +376,12 @@ export default function App() {
 				initialMode={modeKey}
 				initialGens={gens}
 				initialMuted={muted}
+				initialReminderEnabled={reminderSettings.enabled}
+				initialReminderTime={formatReminderTime(
+					reminderSettings.hour,
+					reminderSettings.minute
+				)}
+				reminderStatus={reminderStatus}
 				inGame={screen === 'game'}
 				onApply={applySettings}
 				onGiveUp={giveUp}
